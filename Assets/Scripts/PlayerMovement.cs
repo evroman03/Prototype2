@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     //Makes Class a Singleton Class.
     #region Singleton
     private static PlayerMovement instance;
