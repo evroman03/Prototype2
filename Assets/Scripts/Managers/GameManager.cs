@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
                 instance = FindAnyObjectByType(typeof(GameManager)) as GameManager;
             return instance;
         }
@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     //Current game state
     public STATE gameState;
     [SerializeField] private DeckManager deckManager;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
 
@@ -33,7 +34,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //Sets the game state to menu
-        gameState = STATE.Menu;
+        ChangeGameState(STATE.Menu);
+
+        ChangeGameState(STATE.ChooseCards);
     }
 
     /**
@@ -64,15 +67,15 @@ public class GameManager : MonoBehaviour
         {
             case STATE.Menu:
                 gameState = STATE.Menu;
-                //Add method here if needed
+                StartGame();
                 break;
             case STATE.ChooseCards:
                 gameState = STATE.ChooseCards;
-                //Add method here if needed
+                DealCards();
                 break;
             case STATE.Lv1:
                 gameState = STATE.Lv1;
-                //Add method here if needed
+                RunPlaySequence();
                 break;
             case STATE.End:
                 gameState = STATE.End;
@@ -81,6 +84,61 @@ public class GameManager : MonoBehaviour
             default:
                 print("ERROR: FAILED TO SWITCH GAME STATE.");
                 break;
+        }
+    }
+
+    //Calls "Start" Functions for other Managers
+    private void StartGame()
+    {
+        deckManager.InitDeckManager();
+        uiManager.InitUIManager();
+        deckManager.BuildDeck();
+    }
+
+    private void DealCards()
+    {
+        deckManager.DealCard();
+        deckManager.DealCard();
+        deckManager.DealCard();
+        deckManager.DealCard();
+
+        //uiManager.UpdateImages();
+    }
+
+    private void RunPlaySequence()
+    {
+        deckManager.ReturnDealtCards();
+        deckManager.ShuffleDeck();
+        
+        List<Card> playedCards = deckManager.GetPlayedCards();
+
+        int playedCardsSize = playedCards.Count;
+        for (int i = 0; i < playedCardsSize; i++) {
+            switch (playedCards[i].name) {
+                case "Move Card":
+                    //TODO - Call PlayerMovement Move Method Here!
+                    break;
+                case "Jump Card":
+                    //TODO - Call PlayerMovement Jump Method Here!
+                    break;
+                case "Turn Right Card":
+                    //TODO - Call PlayerMovement Turn Right Method Here!
+                    break;
+                case "Turn Left Card":
+                //TODO - Call PlayerMovement Turn Left Method Here!
+                case "Back To It Card":
+                    //TODO - Call PlayerMovement Back To It Method Here!
+                    break;
+                case "Switch Card":
+                    //TODO - Call PlayerMovement Switch Method Here!
+                    break;
+                case "Clear Card":
+                    //TODO - Call PlayerMovement Clear Method Here!
+                    break;
+                default:
+                    print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
+                    break;
+            }
         }
     }
 
