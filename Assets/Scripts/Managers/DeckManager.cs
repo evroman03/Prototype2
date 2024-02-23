@@ -33,6 +33,7 @@ public class DeckManager : MonoBehaviour
     Card spawnCard = null;
     List<Card> deck;
     List<Card> dealtCards;
+    List<Card> playedCards;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +43,9 @@ public class DeckManager : MonoBehaviour
                      + numBackToItCards + numSwitchCards + numClearCards;
         deck = new List<Card>();
         dealtCards = new List<Card>();
-        CreateDeck();
-        ShuffleDeck();
-        PrintDeck();
+        playedCards = new List<Card>();
+
+        BuildDeck();
 
         /**
         --Testing--
@@ -63,6 +64,17 @@ public class DeckManager : MonoBehaviour
         print("DECK:");
         PrintDeck();
         */
+    }
+
+    /**
+ * Resets the deck and remakes the deck for the start of the game.
+ */
+    public void BuildDeck()
+    {
+        deck = new List<Card>();
+        CreateDeck();
+        ShuffleDeck();
+        PrintDeck();
     }
 
     /**
@@ -350,6 +362,7 @@ public class DeckManager : MonoBehaviour
     public void PlayDealtCard(int cardPlacementNum)
     {
         print("PLAYED " + dealtCards[cardPlacementNum - 1]);
+        playedCards.Add(deck[cardPlacementNum - 1]);
         dealtCards.RemoveAt(cardPlacementNum - 1);
     }
 
@@ -369,6 +382,87 @@ public class DeckManager : MonoBehaviour
     }
 
     /**
+     * Removes the first card in the play deck
+     */
+    public void RemoveFirstPlayed()
+    {
+        //Checks to make sure there is at least one card in the played deck
+        if (playedCards.Count > 0)
+            playedCards.RemoveAt(0);
+        else
+            print("ERROR: FAILED TO REMOVE FIRST CARD");
+    }
+
+    /**
+     * Removes the last card in the play deck
+     */
+    public void RemoveLastPlayed()
+    {
+        //Checks to make sure there is at least one card in the played deck
+        if (playedCards.Count > 0)
+
+            playedCards.RemoveAt(playedCards.Count - 1);
+        else
+            print("ERROR: FAILED TO REMOVE LAST CARD");
+    }
+
+    /**
+     * Swaps two cards in the play deck
+     * @Param indexSwap1 - the first card's index to swap with
+     * @Param indexSwap2 - the second card's index to swap with
+     */
+    public void SwapTwoCards(int indexSwap1, int indexSwap2)
+    {
+        //Checks to make sure there is at least one card in the played deck
+        if (playedCards.Count > 0)
+        {
+            Card temp = playedCards[indexSwap1];
+            playedCards[indexSwap1] = playedCards[indexSwap2];
+            playedCards[indexSwap2] = temp;
+        }
+    }
+
+    /**
+     * Returns the list of all cards played
+     */
+    public List<Card> GetDeck()
+    {
+        return deck;
+    }
+
+    /**
+     * Returns the list of all cards played
+     */
+    public List<Card> GetDealtCards()
+    {
+        return dealtCards;
+    }
+
+    /**
+     * Clears all data from dealt cards deck
+     */
+    public void ClearDealtCards()
+    {
+        dealtCards = new List<Card>();
+    }
+
+    /**
+     * Returns the list of all cards played
+     */
+    public List<Card> GetPlayedCards()
+    {
+        return playedCards;
+    }
+
+    /**
+     * Clears all data from the played cards deck
+     */
+    public void ClearPlayedCards()
+    {
+        playedCards = new List<Card>();
+    }
+
+    /**
      * Prints all cards in the deck list into the console.
      */
     private void PrintDeck()
@@ -379,6 +473,9 @@ public class DeckManager : MonoBehaviour
         }
     }
 
+    /**
+     * Prints the dealt cards
+     */
     private void PrintDealtCards()
     {
         int dealtCardsSize = dealtCards.Count;

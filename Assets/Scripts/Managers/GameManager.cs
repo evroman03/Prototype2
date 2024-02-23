@@ -25,12 +25,35 @@ public class GameManager : MonoBehaviour
 
     //Current game state
     public STATE gameState;
+    [SerializeField] private DeckManager deckManager;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Vector3 playerStartingLocation;
 
     // Start is called before the first frame update
     void Start()
     {
         //Sets the game state to menu
         gameState = STATE.Menu;
+    }
+
+    /**
+     * Resets the game back to its starting conditions
+     */
+    private void Reset()
+    {
+        //Resets the decks
+        deckManager.BuildDeck();
+        deckManager.ClearDealtCards();
+        deckManager.ClearPlayedCards();
+
+        //Resets player position
+        player.transform.position = playerStartingLocation;
+        player.transform.rotation = Quaternion.identity;
+        player.transform.rotation *= Quaternion.Euler(0, 0, 0);
+
+        //Resets Game State
+        changeGameState(STATE.Menu);
+
     }
 
     //Changes the game state and activates methods if needed
