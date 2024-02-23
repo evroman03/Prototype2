@@ -52,12 +52,12 @@ public class GameManager : MonoBehaviour
         player.transform.rotation *= Quaternion.Euler(0, 0, 0);
 
         //Resets Game State
-        changeGameState(STATE.Menu);
+        ChangeGameState(STATE.Menu);
 
     }
 
     //Changes the game state and activates methods if needed
-    public void changeGameState(STATE state)
+    public void ChangeGameState(STATE state)
     {
         switch (state)
         {
