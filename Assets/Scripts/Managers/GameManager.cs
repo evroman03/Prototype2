@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
         deckManager.BuildDeck();
         deckManager.ClearDealtCards();
         deckManager.ClearPlayedCards();
+        deckManager.SetStoredCard(null);
 
         //Resets player position
         player.transform.position = playerStartingLocation;

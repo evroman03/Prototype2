@@ -30,10 +30,10 @@ public class DeckManager : MonoBehaviour
     [SerializeField] Card card;
     [SerializeField] Transform cardFolder;
 
-    Card spawnCard = null;
-    List<Card> deck;
-    List<Card> dealtCards;
-    List<Card> playedCards;
+    private Card spawnCard = null;
+    private List<Card> deck, dealtCards, playedCards;
+
+    private Card storedCard;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +44,8 @@ public class DeckManager : MonoBehaviour
         deck = new List<Card>();
         dealtCards = new List<Card>();
         playedCards = new List<Card>();
+
+        storedCard = null;
 
         BuildDeck();
 
@@ -423,9 +425,25 @@ public class DeckManager : MonoBehaviour
     }
 
     /**
-     * Returns the list of all cards played
+     * Puts a card in the stored card slot
      */
-    public List<Card> GetDeck()
+    public void SetStoredCard(Card card)
+    {
+        storedCard = card;
+    }
+
+    /**
+     * Returns the stored card
+     */
+    public Card GetStoredCard()
+    {
+        return storedCard;
+    }
+
+        /**
+         * Returns the list of all cards played
+         */
+        public List<Card> GetDeck()
     {
         return deck;
     }
