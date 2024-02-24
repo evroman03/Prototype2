@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public PlayerInput PlayerInput;
+    private Animator _animator;
     //Makes Class a Singleton Class.
     #region Singleton
     private static PlayerController instance;
@@ -23,15 +25,28 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        if(_animator ==null)
+        {
+            _animator= GetComponent<Animator>();
+        }
+        PlayerInput.currentActionMap.FindAction("Jump").started += Jump;
+        PlayerInput.currentActionMap.FindAction("Jump").canceled += JumpCanceled;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    void Jump(InputAction.CallbackContext ctx)
+    {
+        print("HERE");
+        _animator.SetTrigger("Jump");
+    }
+    void JumpCanceled(InputAction.CallbackContext ctx)
+    {
+        _animator.ResetTrigger("Jump");
     }
 }
