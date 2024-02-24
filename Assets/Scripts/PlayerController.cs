@@ -42,11 +42,18 @@ public class PlayerController : MonoBehaviour
     }
     void Jump(InputAction.CallbackContext ctx)
     {
-        print("HERE");
-        _animator.SetTrigger("Jump");
+        _animator.SetTrigger("TurnLeft");
     }
     void JumpCanceled(InputAction.CallbackContext ctx)
     {
-        _animator.ResetTrigger("Jump");
+        _animator.ResetTrigger("TurnLeft");
+    }
+    void UpdatePos()
+    {
+        transform.parent.position = gameObject.transform.position;
+    }
+    void UpdateRot()
+    {
+        transform.parent.rotation= gameObject.transform.rotation;  
     }
 }
