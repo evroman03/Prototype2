@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
                 instance = FindAnyObjectByType(typeof(PlayerController)) as PlayerController;
             return instance;
         }
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     {
 
     }
-    void CheckNextSquare()
+    private string CheckNextSquare()
     {
         RaycastHit hit;
         Vector3 parentScan = transform.parent.position+ transform.parent.forward * 1f;
@@ -59,15 +59,16 @@ public class PlayerController : MonoBehaviour
             switch(temp)
             {
                 case GroundTag:
-                    break;
+                    return (GroundTag);
                 case OneBlockTag:
-                    break;
-                case TwoBlockTag: 
-                    break;
+                    return (OneBlockTag);
+                case TwoBlockTag:
+                    return (TwoBlockTag);
                 default:
-                    break;
+                    return (HoleTag);
             }
         }
+        return ("ERROR");
     }
     void Jump(InputAction.CallbackContext ctx)
     {
