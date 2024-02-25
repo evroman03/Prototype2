@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
     [SerializeField] DeckManager deckManager;
     [SerializeField] private TextMeshProUGUI readyText;
+    [SerializeField] private TextMeshProUGUI shuffleText;
     
     //Delcare Variables
     List<Card> dealtCards;
@@ -302,8 +303,27 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /**
+     * Shows all cards that have been played
+     */
+    public void ShowPlayedCards()
+    {
+
+    }
+
+    /**
+     * Updates the text for the storage cooldown
+     */
     public void UpdateReadyText()
     {
         readyText.text = "Ready In: " + deckManager.GetStoredCardWait();
+    }
+    
+    /**
+     * Updates the shuffle text
+     */
+    public void UpdateShuffleText()
+    {
+        shuffleText.text = "Shuffles: " + gameManager.GetNumOfShuffles();
     }
 }

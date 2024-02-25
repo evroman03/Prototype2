@@ -129,9 +129,14 @@ public class GameManager : MonoBehaviour
 
     public void ShuffleDeck()
     {
-        deckManager.ReturnDealtCards();
-        deckManager.ShuffleDeck();
-        ChangeGameState(STATE.ChooseCards);
+        if (numOfShuffles > 0)
+        {
+            deckManager.ReturnDealtCards();
+            deckManager.ShuffleDeck();
+            ChangeGameState(STATE.ChooseCards);
+            numOfShuffles--;
+            uiManager.UpdateShuffleText();
+        }
     }
 
     private void RunPlaySequence()
@@ -230,6 +235,11 @@ public class GameManager : MonoBehaviour
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
         ChangeGameState(STATE.Lv1);
+    }
+
+    public int GetNumOfShuffles()
+    {
+        return numOfShuffles;
     }
 
     //All possible game states.
