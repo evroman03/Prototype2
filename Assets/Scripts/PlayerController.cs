@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerInput PlayerInput;
     private Animator _animator;
+    private const string HoleTag = "Hole";
+    private const string GroundTag = "Ground";
+    private const string OneBlockTag = "OneBlock";
+    private const string TwoBlockTag = "TwoBlock";
     //Makes Class a Singleton Class.
     #region Singleton
     private static PlayerController instance;
@@ -38,15 +42,40 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        CheckNextSquare();
+    }
+    void CheckNextSquare()
+    {
+        RaycastHit hit;
+        Vector3 parentScan = transform.parent.position+ transform.parent.forward * 1f;
+        Debug.DrawRay(parentScan, transform.parent.up*0.1f, Color.red);
+        if(Physics.Raycast(parentScan, transform.parent.up * 0.1f, out hit))
+        {
+            string temp = hit.collider.tag.ToString();
+            switch(temp)
+            {
+                case GroundTag:
+                    break;
+                case OneBlockTag:
+                    break;
+                case TwoBlockTag: 
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     void Jump(InputAction.CallbackContext ctx)
     {
-        _animator.SetTrigger("TurnLeft");
+        
     }
     void JumpCanceled(InputAction.CallbackContext ctx)
     {
-        _animator.ResetTrigger("TurnLeft");
+       
+    }
+    void CheckFalling()
+    {
+        UpdatePos();
     }
     void UpdatePos()
     {
