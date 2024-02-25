@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,10 +30,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
     [SerializeField] DeckManager deckManager;
-
+    [SerializeField] private TextMeshProUGUI readyText;
+    
     //Delcare Variables
     List<Card> dealtCards;
     Card storedCardData;
+
 
     /**
      * Initializes variables for UIManager
@@ -45,13 +48,147 @@ public class UIManager : MonoBehaviour
     }
 
     /**
+     * Enables and Disables the card images depending if the card slot is null or not
+     */
+    public void CheckDealtCards()
+    {
+        int dealtCardsCount = dealtCards.Count;
+        storedCardData = deckManager.GetStoredCard();
+
+        //If there is at least 1 card in the dealtCards deck, show the first dealt card
+        if (dealtCardsCount > 0)
+            dealtCard1.enabled = true;
+        else
+            dealtCard1.enabled = false;
+
+        //If there is at least 2 cards in the dealtCards deck, show the second dealt card
+        if (dealtCardsCount > 1)
+            dealtCard2.enabled = true;
+        else
+            dealtCard2.enabled = false;
+
+        //If there is at least 3 cards in the dealtCards deck, show the second dealt card
+        if (dealtCardsCount > 2)
+            dealtCard3.enabled = true;
+        else
+            dealtCard3.enabled = false;
+
+        //If there is at least 4 cards in the dealtCards deck, show the second dealt card
+        if (dealtCardsCount > 3)
+            dealtCard4.enabled = true;
+        else
+            dealtCard4.enabled = false;
+
+        //If there is a stored card, show the stored card
+        if (storedCardData != null)
+        {
+            storedCard.enabled = true;
+            readyText.enabled = true;
+        }
+        else
+        {
+            storedCard.enabled = false;
+            readyText.enabled = false;
+        }
+    }
+
+    /**
+     * Plays the selected card
+     */
+    public void PlayCard()
+    {
+        if (gameManager.gameState == GameManager.STATE.ChooseCards)
+        {
+            if (storedCardData != null && storedCardData.GetClicked() && deckManager.GetStoredCardWait() < 1)
+            {
+                deckManager.PlayDealtCard(-1);
+
+                CheckDealtCards();
+                gameManager.ChangeGameState(GameManager.STATE.Lv1);
+            }
+
+            int dealtCardsCount = dealtCards.Count;
+            for (int i = 0; i < dealtCardsCount; i++)
+            {
+                if (dealtCards[i].GetClicked())
+                {
+                    deckManager.PlayDealtCard(i);
+                    dealtCardsCount--;
+
+                    CheckDealtCards();
+                    gameManager.ChangeGameState(GameManager.STATE.Lv1);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Stores the selected card
+     */
+    public void StoreCard()
+    {
+        if (gameManager.gameState == GameManager.STATE.ChooseCards)
+        {
+            int dealtCardsCount = dealtCards.Count;
+            for (int i = 0; i < dealtCardsCount; i++)
+            {
+                if (dealtCards[i].GetClicked())
+                {
+                    //Checks to see if the stored card is not the same as the one attempting to be stored
+                    if (storedCardData == null || deckManager.GetStoredCardWait() < 1)
+                    {
+                        deckManager.SetStoredCard(dealtCards[i]);
+                        dealtCardsCount--;
+                        CheckDealtCards();
+                        UpdateReadyText();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * If the Card is clicked, automatically calls this method.
      */
-    public void CardClicked(int cardClicked)
+    public void DealtCardClicked(int cardClicked)
     {
-        deckManager.PlayDealtCard(cardClicked);
-        gameManager.ChangeGameState(GameManager.STATE.Lv1);
-        gameManager.ChangeGameState(GameManager.STATE.ChooseCards);
+        if (gameManager.gameState == GameManager.STATE.ChooseCards)
+        {
+            //Checks if the stored card was clicked
+            if (cardClicked == -1)
+            {
+                if (storedCardData != null)
+                    storedCardData.SetClicked(true);
+                return;
+            }
+            else if (storedCardData != null)
+                storedCardData.SetClicked(false);
+
+            int dealtCardsCount = dealtCards.Count;
+
+            //Sets all cards to not clicked
+            for (int i = 0; i < dealtCardsCount; i++)
+            {
+                dealtCards[i].SetClicked(false);
+            }
+
+            //Sets the card that was clicked to clicked
+            dealtCards[cardClicked - 1].SetClicked(true);
+        }
+    }
+
+    public void PlayedCardClicked()
+    {
+        if (gameManager.gameState == GameManager.STATE.SwitchCards) {
+            //TODO
+        }
+    }
+
+    public void UpdateDealtCards()
+    {
+        dealtCards = deckManager.GetDealtCards();
     }
 
     /**
@@ -59,8 +196,7 @@ public class UIManager : MonoBehaviour
      */
     public void UpdateImages()
     {
-        //Gathers data from the dealt cards deck and stored card data
-        dealtCards = deckManager.GetDealtCards();
+        //Gathers stored card data
         storedCardData = deckManager.GetStoredCard();
 
         //Checks if the data is not null
@@ -164,5 +300,10 @@ public class UIManager : MonoBehaviour
                 print("ERROR: FAILED TO CHANGE DEALT CARD 1 SPRITE");
                 break;
         }
+    }
+
+    public void UpdateReadyText()
+    {
+        readyText.text = "Ready In: " + deckManager.GetStoredCardWait();
     }
 }

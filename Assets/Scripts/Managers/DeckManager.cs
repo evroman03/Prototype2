@@ -33,7 +33,8 @@ public class DeckManager : MonoBehaviour
     private Card spawnCard = null;
     public List<Card> deck, dealtCards, playedCards;
 
-    private Card storedCard;
+    [SerializeField] Card storedCard;
+    private int storedCardWait;
 
     /*
      * Initializes variables for DeckManager
@@ -52,6 +53,7 @@ public class DeckManager : MonoBehaviour
         playedCards = new List<Card>();
 
         storedCard = null;
+        storedCardWait = 2;
     }
 
     /**
@@ -62,7 +64,6 @@ public class DeckManager : MonoBehaviour
         deck = new List<Card>();
         CreateDeck();
         ShuffleDeck();
-        PrintDeck();
     }
 
     /**
@@ -81,7 +82,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Move Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -97,7 +98,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Jump Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -113,7 +114,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Turn Right Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -129,7 +130,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Turn Left Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -145,7 +146,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Back To It Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -161,7 +162,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Switch Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -177,7 +178,7 @@ public class DeckManager : MonoBehaviour
 
             //Changes attributes of the card
             spawnCard.name = "Clear Card";
-            spawnCard.setClicked(false);
+            spawnCard.SetClicked(false);
 
             //Adds card into the deck
             deck.Add(spawnCard);
@@ -195,7 +196,6 @@ public class DeckManager : MonoBehaviour
         int repeatShuffle = 0;
         for (int i = 0; i < numberOfShuffles; i++)
         {
-            print("SHUFFLE COUNTER: " + (i + 1));
             //Repeats the Over Hand Shuffle 5-10 times
             repeatShuffle = Random.Range(5, 11);
             for (int j = 0; j < repeatShuffle; j++)
@@ -221,8 +221,6 @@ public class DeckManager : MonoBehaviour
      */
     private void RiffleShuffle()
     {
-        print("BEGINNING OF RIFFLE SHUFFLE: " + deck.Count);
-        PrintDeck();
         List<Card> topHalf = new List<Card>();
         List<Card> bottomHalf = new List<Card>();
         Card tempCard = null;
@@ -260,7 +258,6 @@ public class DeckManager : MonoBehaviour
      */
     private void OverHandShuffle()
     {
-        print("BEGINNING OF OVERHAND SHUFFLE: " + deck.Count);
         //Makes a random size starting packet
         int startingIndex = Random.Range(1, 6);
         int deckSize = deck.Count;
@@ -304,7 +301,6 @@ public class DeckManager : MonoBehaviour
      */
     private void Cut(int index)
     {
-        print("BEGINNING OF CUT: " + deck.Count);
         //Keeps index in bounds
         if (index > 0 && index < totalCards)
         {
@@ -343,10 +339,19 @@ public class DeckManager : MonoBehaviour
     /**
      * Plays the dealt card and removes it from the dealtCards list.
      */
-    public void PlayDealtCard(int cardPlacementNum)
+    public void PlayDealtCard(int cardPlacementNumIndex)
     {
-        playedCards.Add(dealtCards[cardPlacementNum - 1]);
-        dealtCards.RemoveAt(cardPlacementNum - 1);
+        //Checks if the stored card was clicked
+        if (cardPlacementNumIndex == -1)
+        {
+            playedCards.Add(storedCard);
+            storedCard = null;
+            return;
+        }
+
+        playedCards.Add(dealtCards[cardPlacementNumIndex]);
+        dealtCards.RemoveAt(cardPlacementNumIndex);
+        
     }
 
     /**
@@ -355,7 +360,6 @@ public class DeckManager : MonoBehaviour
     public void ReturnDealtCards()
     {
         int dealtCardsSize = dealtCards.Count;
-        print(dealtCardsSize);
         for (int i = 0; i < dealtCardsSize; i++)
         {
             deck.Add(dealtCards[0]);
@@ -372,8 +376,6 @@ public class DeckManager : MonoBehaviour
         //Checks to make sure there is at least one card in the played deck
         if (playedCards.Count > 0)
             playedCards.RemoveAt(0);
-        else
-            print("ERROR: FAILED TO REMOVE FIRST CARD");
     }
 
     /**
@@ -385,8 +387,6 @@ public class DeckManager : MonoBehaviour
         if (playedCards.Count > 0)
 
             playedCards.RemoveAt(playedCards.Count - 1);
-        else
-            print("ERROR: FAILED TO REMOVE LAST CARD");
     }
 
     /**
@@ -394,14 +394,50 @@ public class DeckManager : MonoBehaviour
      * @Param indexSwap1 - the first card's index to swap with
      * @Param indexSwap2 - the second card's index to swap with
      */
-    public void SwapTwoCards(int indexSwap1, int indexSwap2)
+    public void SwapTwoCards()
     {
-        //Checks to make sure there is at least one card in the played deck
-        if (playedCards.Count > 0)
+        int numOfSelectedCards = 0;
+        int playedCardsCount = playedCards.Count;
+
+        //Searches for two selected cards
+        for (int i = 0; i < playedCardsCount; i++)
         {
-            Card temp = playedCards[indexSwap1];
-            playedCards[indexSwap1] = playedCards[indexSwap2];
-            playedCards[indexSwap2] = temp;
+            if (playedCards[i].GetClicked())
+            {
+                numOfSelectedCards++;
+            }
+        }
+
+        if (numOfSelectedCards == 2)
+        {
+            int index1 = -1;
+            int index2 = -1;
+            int i = 0;
+
+            //Finds first instance of selected card
+            for (i = 0; i < playedCardsCount; i++)
+            {
+                if (playedCards[i].GetClicked())
+                {
+                    index1 = i;
+                    break;
+                }
+            }
+
+            //Finds second instance of a clicked card
+            for (i += 1;  i < playedCardsCount; i++)
+            {
+                if (playedCards[i].GetClicked())
+                {
+                    index2 = i;
+                    break;
+                }
+            }
+
+            //Swaps the cards
+            Card tempCard = playedCards[index1];
+            playedCards[index1] = playedCards[index2];
+            playedCards[index2] = tempCard;
         }
     }
 
@@ -410,7 +446,29 @@ public class DeckManager : MonoBehaviour
      */
     public void SetStoredCard(Card card)
     {
-        storedCard = card;
+        if (storedCard != null)
+        {
+            int dealtCardsCount = dealtCards.Count;
+            Card tempCard = storedCard;
+            for (int i = 0; i < dealtCardsCount; i++)
+            {
+                if (dealtCards[i].GetClicked())
+                {
+                    storedCard = dealtCards[i];
+                    dealtCards[i] = tempCard;
+                    dealtCards.Remove(storedCard);
+
+                    storedCardWait = 2;
+                    return;
+                }
+            }
+        }
+        if (storedCard == null)
+        {
+            storedCard = card;
+            dealtCards.Remove(card);
+            storedCardWait = 2;
+        }
     }
 
     /**
@@ -419,6 +477,14 @@ public class DeckManager : MonoBehaviour
     public Card GetStoredCard()
     {
         return storedCard;
+    }
+
+    public void UpdateStoredCardWait()
+    {
+        if (storedCard != null && storedCardWait > 0)
+        {
+            storedCardWait--;
+        }
     }
 
         /**
@@ -459,6 +525,16 @@ public class DeckManager : MonoBehaviour
     public void ClearPlayedCards()
     {
         playedCards = new List<Card>();
+    }
+
+    /**
+     * Gets the wait countdown
+     */
+    public int GetStoredCardWait()
+    {
+        if (storedCard == null)
+            return 2;
+        return storedCardWait;
     }
 
     /**
