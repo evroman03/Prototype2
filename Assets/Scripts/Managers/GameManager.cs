@@ -33,10 +33,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int cardsToDeal = 4;
 
     [SerializeField] private Button removeFirst, removeLast;
-
+    private PlayerController pC;
     // Start is called before the first frame update
     void Start()
     {
+        pC = PlayerController.Instance;
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
 
@@ -160,19 +161,24 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playedCardsSize; i++) {
             switch (playedCards[i].name) {
                 case "Move Card":
-                    print("MOVED");
+                    pC.Action(playedCards[i].name);
+                    print("MOVED");                   
                     //TODO - Call PlayerMovement Move Method Here!
                     break;
                 case "Jump Card":
-                    print("JUMPED");
+                    pC.Action(playedCards[i].name);
+                    print("JUMPED");                    
                     //TODO - Call PlayerMovement Jump Method Here!
                     break;
                 case "Turn Right Card":
                     print("TURNED RIGHT");
+                    pC.Action(playedCards[i].name);
                     //TODO - Call PlayerMovement Turn Right Method Here!
                     break;
                 case "Turn Left Card":
+                    pC.Action(playedCards[i].name);
                     print("TURNED LEFT");
+
                     //TODO - Call PlayerMovement Turn Left Method Here!
                     break;
                 //TODO - Call PlayerMovement Turn Left Method Here!
