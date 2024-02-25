@@ -31,18 +31,22 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        if(_animator ==null)
+        if (_animator == null)
         {
-            _animator= GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
         PlayerInput.currentActionMap.FindAction("Jump").started += Jump;
         PlayerInput.currentActionMap.FindAction("Jump").canceled += JumpCanceled;
+    }
+    public void Action(string actionName)
+    {
+        CheckNextSquare();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckNextSquare();
+
     }
     void CheckNextSquare()
     {
