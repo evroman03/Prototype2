@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
                 instance = FindAnyObjectByType(typeof(UIManager)) as UIManager;
             return instance;
         }
