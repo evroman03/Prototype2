@@ -108,8 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7716a033d97f0f44283d588fa9d1c288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerInput: {fileID: 0}
-  virtualCamera: {fileID: 0}
+  PlayerInput: {fileID: 2409389655652410456}
+  virtualCamera: {fileID: 7548964786283510077}
+  cameraSpeedMult: 1
 --- !u!114 &2409389655652410456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,8 +439,8 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneWidth: 0
+  m_SoftZoneHeight: 0
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1

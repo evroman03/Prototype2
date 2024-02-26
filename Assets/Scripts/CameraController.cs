@@ -1,69 +1,54 @@
 using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
     public PlayerInput PlayerInput;
-    public CinemachineVirtualCamera virtualCamera; // Reference to your Cinemachine Virtual Camera
-    private bool isMoving;
-    float panInput;
+    public CinemachineVirtualCamera virtualCamera;
+    private Coroutine cameraMovementCoroutine;
+    [SerializeField] float cameraSpeedMult;
 
-
-    // Start is called before the first frame update
-
-    #region Singleton
-    private static CameraController instance;
-    public static CameraController Instance
+    private void Start()
     {
-        get
-        {
-            if (instance == null)
-                instance = FindAnyObjectByType(typeof(CameraController)) as CameraController;
-            return instance;
-        }
-        set
-        {
-            instance = value;
-        }
+        // Subscribe to input events
+        PlayerInput.currentActionMap["PanCamera"].started += ctx => OnPanCamera(ctx);
+        PlayerInput.currentActionMap["PanCamera"].canceled += ctx => OnPanCameraCanceled(ctx);
     }
-    #endregion
 
-    void Start()
+    private void OnPanCamera(InputAction.CallbackContext ctx)
     {
-        PlayerInput.currentActionMap.FindAction("PanCamera").started += PanCamera;
-        PlayerInput.currentActionMap.FindAction("PanCamera").canceled += PanCameraCanceled;
-    }
-    private void Update()
-    {
-        if(isMoving)
+        // Read the input value from the context
+        float panInput = ctx.ReadValue<float>();
+
+        // Start or stop camera movement based on input
+        if (cameraMovementCoroutine != null)
         {
-            MoveCamera();
+            StopCoroutine(cameraMovementCoroutine);
+        }
+        cameraMovementCoroutine = StartCoroutine(MoveCamera(panInput));
+    }
+
+    private void OnPanCameraCanceled(InputAction.CallbackContext ctx)
+    {
+        // Stop camera movement when input is canceled
+        if (cameraMovementCoroutine != null)
+        {
+            StopCoroutine(cameraMovementCoroutine);
         }
     }
 
-    void PanCamera(InputAction.CallbackContext ctx)
+    private IEnumerator MoveCamera(float direction)
     {
-        isMoving = true;
-        panInput = ctx.ReadValue<float>();
-        Debug.Log("pressed");
-    }
-
-    void PanCameraCanceled(InputAction.CallbackContext ctx)
-    {
-        isMoving = false;
-        Debug.Log("released");
-    }
-
-    void MoveCamera()
-    {
-        // Get the CinemachineTrackedDolly from the Virtual Camera
         CinemachineTrackedDolly dolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
+        float movementSpeed = direction * cameraSpeedMult;
 
-        // Adjust the position of the dolly based on input
-        dolly.m_PathPosition += panInput;
+        while (Mathf.Abs(direction) > 0.01f)
+        {
+            dolly.m_PathPosition += movementSpeed * Time.deltaTime * -1;
+            direction = PlayerInput.currentActionMap["PanCamera"].ReadValue<float>();
+            yield return null;
         }
     }
+}
