@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
     [SerializeField] private int cardsToDeal = 4;
+    [SerializeField] private int numOfShuffles = 3;
 
     [SerializeField] private Button removeFirst, removeLast;
     private PlayerController pC;
@@ -124,6 +125,18 @@ public class GameManager : MonoBehaviour
         uiManager.UpdateDealtCards();
         uiManager.CheckDealtCards();
         //uiManager.UpdateImages();
+    }
+
+    public void ShuffleDeck()
+    {
+        if (numOfShuffles > 0)
+        {
+            deckManager.ReturnDealtCards();
+            deckManager.ShuffleDeck();
+            ChangeGameState(STATE.ChooseCards);
+            numOfShuffles--;
+            uiManager.UpdateShuffleText();
+        }
     }
 
     private void RunPlaySequence()
@@ -222,6 +235,11 @@ public class GameManager : MonoBehaviour
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
         ChangeGameState(STATE.Lv1);
+    }
+
+    public int GetNumOfShuffles()
+    {
+        return numOfShuffles;
     }
 
     //All possible game states.

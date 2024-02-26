@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
                 instance = FindAnyObjectByType(typeof(PlayerMovement)) as PlayerMovement;
             return instance;
         }

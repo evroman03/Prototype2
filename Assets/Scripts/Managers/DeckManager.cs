@@ -11,7 +11,7 @@ public class DeckManager : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
                 instance = FindAnyObjectByType(typeof(GameManager)) as GameManager;
             return instance;
         }
