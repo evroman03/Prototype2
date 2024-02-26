@@ -13,11 +13,11 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         // Subscribe to input events
-        PlayerInput.currentActionMap["PanCamera"].started += ctx => OnPanCamera(ctx);
-        PlayerInput.currentActionMap["PanCamera"].canceled += ctx => OnPanCameraCanceled(ctx);
+        PlayerInput.currentActionMap["PanCamera"].started += ctx => PanCamera(ctx);
+        PlayerInput.currentActionMap["PanCamera"].canceled += ctx => PanCameraCanceled(ctx);
     }
 
-    private void OnPanCamera(InputAction.CallbackContext ctx)
+    private void PanCamera(InputAction.CallbackContext ctx)
     {
         // Read the input value from the context
         float panInput = ctx.ReadValue<float>();
@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
         cameraMovementCoroutine = StartCoroutine(MoveCamera(panInput));
     }
 
-    private void OnPanCameraCanceled(InputAction.CallbackContext ctx)
+    private void PanCameraCanceled(InputAction.CallbackContext ctx)
     {
         // Stop camera movement when input is canceled
         if (cameraMovementCoroutine != null)
