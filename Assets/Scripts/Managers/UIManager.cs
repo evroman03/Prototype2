@@ -9,7 +9,6 @@ public class UIManager : MonoBehaviour
     //Makes Class a Singleton Class.
     #region Singleton
     private static UIManager instance;
-    private GameManager gameManager;
     public static UIManager Instance
     {
         get
@@ -24,17 +23,22 @@ public class UIManager : MonoBehaviour
         }
     }
     #endregion
-
+    private GameManager gameManager;
     //Get data
+    [SerializeField] private Canvas gameUI, playedCardsUI;
+    [SerializeField] private int maxNumOfCardsPlayed = 12;
     [SerializeField] private Image dealtCard1, dealtCard2, dealtCard3, dealtCard4, storedCard;
+    [SerializeField] private Image[] playedCards;
     [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
     [SerializeField] DeckManager deckManager;
+    [SerializeField] private Button returnButton;
     [SerializeField] private TextMeshProUGUI readyText;
     [SerializeField] private TextMeshProUGUI shuffleText;
     
     //Delcare Variables
     List<Card> dealtCards;
+    List<Card> playedCardsData;
     Card storedCardData;
 
 
@@ -46,6 +50,14 @@ public class UIManager : MonoBehaviour
         //Initiate Variables
         gameManager = GameManager.Instance;
         dealtCards = new List<Card>();
+        gameUI.enabled = true;
+        playedCardsUI.enabled = false;
+
+        for (int i = 0; i < maxNumOfCardsPlayed;  i++)
+        {
+            playedCards[i].enabled = false;
+        }
+        returnButton.gameObject.SetActive(false);
     }
 
     /**
@@ -105,7 +117,9 @@ public class UIManager : MonoBehaviour
                 deckManager.PlayDealtCard(-1);
 
                 CheckDealtCards();
+
                 gameManager.ChangeGameState(GameManager.STATE.Lv1);
+                return;
             }
 
             int dealtCardsCount = dealtCards.Count;
@@ -180,10 +194,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void PlayedCardClicked()
+    /**
+     * Called when a played card is clicked
+     */
+    public void PlayedCardClicked(int cardClicked)
     {
-        if (gameManager.gameState == GameManager.STATE.SwitchCards) {
-            //TODO
+        //Checks the GameState
+        if (gameManager.gameState == GameManager.STATE.SwitchCards || gameManager.gameState == GameManager.STATE.Lv1) {
+            playedCardsData = deckManager.GetPlayedCards();
+            int playedCardsCount = playedCardsData.Count;
+
+            //Sets the card that was clicked to clicked
+            playedCardsData[cardClicked - 1].SetClicked(true);
+
+            //Calls swap method
+            deckManager.SwapTwoCards();
         }
     }
 
@@ -195,31 +220,32 @@ public class UIManager : MonoBehaviour
     /**
      * Updates the Dealt Card Sprites
      */
-    public void UpdateImages()
+    public void UpdateDealtCardsImages()
     {
         //Gathers stored card data
         storedCardData = deckManager.GetStoredCard();
 
         //Checks if the data is not null
+        //If it is not null, display the correct image
         if (dealtCards[0] != null)
         {
-            UpdateImageSprite(dealtCard1, 0);
+            UpdateImageSprite(dealtCard1, 0, true);
         }
         if (dealtCards[1] != null)
         {
-            UpdateImageSprite(dealtCard2, 1);
+            UpdateImageSprite(dealtCard2, 1, true);
         }
         if (dealtCards[2] != null)
         {
-            UpdateImageSprite(dealtCard3, 2);
+            UpdateImageSprite(dealtCard3, 2, true);
         }
         if (dealtCards[3] != null)
         {
-            UpdateImageSprite(dealtCard4, 3);
+            UpdateImageSprite(dealtCard4, 3, true);
         }
         if (storedCardData != null)
         {
-            //Checks between the possible card names
+            //Check for the stored card
             switch (storedCardData.name)
             {
                 //If Move Card is present
@@ -258,57 +284,136 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdatePlayedCardsImage()
+    {
+        playedCardsData = deckManager.GetPlayedCards();
+        int playerCardCount = playedCardsData.Count;
+
+        //Enables images for the played cards
+        for (int i = 0; i < playerCardCount; i++)
+        {
+            if (playedCardsData[i] != null)
+            {
+                playedCards[i].enabled = true;
+                UpdateImageSprite(playedCards[i], i, false);
+            }
+            else
+                playedCards[i].enabled = false;
+        }
+
+        //Disables all other card images
+        for (int i = playerCardCount; i < maxNumOfCardsPlayed; i++)
+        {
+            playedCards[i].enabled = false;
+        }
+    }
+
     /**
      * Helper Method for UpdateImages
      * 
      * Checks the possible names for the cards and then updates the sprites
      */
-    private void UpdateImageSprite(Image dealtCardImage, int dealtCardIndex)
+    private void UpdateImageSprite(Image cardImage, int cardIndex, bool changeDealtCards)
     {
-        //Checks between possible card names
-        switch (dealtCards[dealtCardIndex].name)
-        {
-            //If Move Card is present
-            case "Move Card":
-                dealtCardImage.sprite = moveCardSprite;
-                break;
-            //If Jump Card is present
-            case "Jump Card":
-                dealtCardImage.sprite = JumpCardSprite;
-                break;
-            //If Turn Right Card is present
-            case "Turn Right Card":
-                dealtCardImage.sprite = TurnRightCardSprite;
-                break;
-            //If Turn Left Card is present
-            case "Turn Left Card":
-                dealtCardImage.sprite = TurnLeftCardSprite;
-                break;
-            //If Back To It Card is present
-            case "Back To It Card":
-                dealtCardImage.sprite = BackToItCardSprite;
-                break;
-            //If Switch Card is present
-            case "Switch Card":
-                dealtCardImage.sprite = SwitchCardSprite;
-                break;
-            //If Clear Card is present
-            case "Clear Card":
-                dealtCardImage.sprite = ClearCardSprite;
-                break;
-            //If card name is invalid
-            default:
-                print("ERROR: FAILED TO CHANGE DEALT CARD 1 SPRITE");
-                break;
+        //Changes dealt card images
+        if (changeDealtCards) {
+            //Checks between possible card names
+            switch (dealtCards[cardIndex].name)
+            {
+                //If Move Card is present
+                case "Move Card":
+                    cardImage.sprite = moveCardSprite;
+                    break;
+                //If Jump Card is present
+                case "Jump Card":
+                    cardImage.sprite = JumpCardSprite;
+                    break;
+                //If Turn Right Card is present
+                case "Turn Right Card":
+                    cardImage.sprite = TurnRightCardSprite;
+                    break;
+                //If Turn Left Card is present
+                case "Turn Left Card":
+                    cardImage.sprite = TurnLeftCardSprite;
+                    break;
+                //If Back To It Card is present
+                case "Back To It Card":
+                    cardImage.sprite = BackToItCardSprite;
+                    break;
+                //If Switch Card is present
+                case "Switch Card":
+                    cardImage.sprite = SwitchCardSprite;
+                    break;
+                //If Clear Card is present
+                case "Clear Card":
+                    cardImage.sprite = ClearCardSprite;
+                    break;
+                //If card name is invalid
+                default:
+                    print("ERROR: FAILED TO CHANGE DEALT CARD 1 SPRITE");
+                    break;
+            }
+        } else {
+            //Checks between possible card names
+            switch (playedCardsData[cardIndex].name)
+            {
+                //If Move Card is present
+                case "Move Card":
+                    cardImage.sprite = moveCardSprite;
+                    break;
+                //If Jump Card is present
+                case "Jump Card":
+                    cardImage.sprite = JumpCardSprite;
+                    break;
+                //If Turn Right Card is present
+                case "Turn Right Card":
+                    cardImage.sprite = TurnRightCardSprite;
+                    break;
+                //If Turn Left Card is present
+                case "Turn Left Card":
+                    cardImage.sprite = TurnLeftCardSprite;
+                    break;
+                //If Back To It Card is present
+                case "Back To It Card":
+                    cardImage.sprite = BackToItCardSprite;
+                    break;
+                //If Switch Card is present
+                case "Switch Card":
+                    cardImage.sprite = SwitchCardSprite;
+                    break;
+                //If Clear Card is present
+                case "Clear Card":
+                    cardImage.sprite = ClearCardSprite;
+                    break;
+                //If card name is invalid
+                default:
+                    print("ERROR: FAILED TO CHANGE DEALT CARD 1 SPRITE");
+                    break;
+            }
         }
     }
 
     /**
      * Shows all cards that have been played
      */
-    public void ShowPlayedCards()
+    public void ShowPlayedCards(bool ableToReturn)
     {
+        gameUI.enabled = false;
+        playedCardsUI.enabled = true;
+        if (ableToReturn)
+            returnButton.gameObject.SetActive(true);
+        else
+            returnButton.gameObject.SetActive(false);
+    }
 
+    /**
+     * Returns back to the Game UI
+     */
+    public void ReturnToGameUI()
+    {
+        gameUI.enabled = true;
+        playedCardsUI.enabled = false;
+        returnButton.gameObject.SetActive(false);
     }
 
     /**
