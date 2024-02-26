@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.UpdateDealtCards();
         uiManager.CheckDealtCards();
-        //uiManager.UpdateDealtCardImages();
+        uiManager.UpdateDealtCardsImages();
     }
 
     public void ShuffleDeck()

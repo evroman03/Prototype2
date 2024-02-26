@@ -56,12 +56,15 @@ public class PlayerController : MonoBehaviour
     }
     public void Action(string actionName)
     {
+        _animator.ResetTrigger("Move");
+        _animator.ResetTrigger("Jump");
+        _animator.ResetTrigger("TurnLeft");
+        _animator.ResetTrigger("TurnRight");
         string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
         string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
             
         if (actionName == "Turn Left Card")
-        {
-            
+        {  
              _animator.SetTrigger("TurnLeft");
         }
         else if (actionName == "Turn Right Card")
@@ -168,6 +171,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+        
     }
 
 
