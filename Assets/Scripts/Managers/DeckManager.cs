@@ -6,13 +6,13 @@ public class DeckManager : MonoBehaviour
     //Makes Class a Singleton Class.
 
     #region Singleton
-    private static GameManager instance;
-    public static GameManager Instance
+    private static DeckManager instance;
+    public static DeckManager Instance
     {
         get
         {
             if (instance == null)
-                instance = FindAnyObjectByType(typeof(GameManager)) as GameManager;
+                instance = FindAnyObjectByType(typeof(DeckManager)) as DeckManager;
             return instance;
         }
         set
@@ -21,6 +21,8 @@ public class DeckManager : MonoBehaviour
         }
     }
     #endregion
+    GameManager gameManager;
+    UIManager uiManager;
 
     //Declares variables
     [SerializeField]
@@ -36,15 +38,11 @@ public class DeckManager : MonoBehaviour
     [SerializeField] Card storedCard;
     private int storedCardWait;
 
-    /*
-     * Initializes variables for DeckManager
-     */
-    private void Start()
-    {
-        
-    }
+    //Init Variables
     public void InitDeckManager()
     {
+        gameManager = GameManager.Instance;
+        uiManager = UIManager.Instance;
         totalCards = numMoveCards + numJumpCards + numTurnRightCards + numTurnLeftCards
                      + numBackToItCards + numSwitchCards + numClearCards;
 
@@ -344,14 +342,18 @@ public class DeckManager : MonoBehaviour
         //Checks if the stored card was clicked
         if (cardPlacementNumIndex == -1)
         {
+            storedCard.SetClicked(false);
             playedCards.Add(storedCard);
             storedCard = null;
+            uiManager.UpdatePlayedCardsImage();
             return;
         }
 
+        //If any other dealt card was clicked
+        dealtCards[cardPlacementNumIndex].SetClicked(false);
         playedCards.Add(dealtCards[cardPlacementNumIndex]);
         dealtCards.RemoveAt(cardPlacementNumIndex);
-        
+        uiManager.UpdatePlayedCardsImage();
     }
 
     /**
@@ -408,6 +410,7 @@ public class DeckManager : MonoBehaviour
             }
         }
 
+        //Checks if two cards were selected
         if (numOfSelectedCards == 2)
         {
             int index1 = -1;
@@ -438,6 +441,15 @@ public class DeckManager : MonoBehaviour
             Card tempCard = playedCards[index1];
             playedCards[index1] = playedCards[index2];
             playedCards[index2] = tempCard;
+
+            //Sets the played cards' clicked to false
+            playedCards[index1].SetClicked(false);
+            playedCards[index2].SetClicked(false);
+
+            //Returns back to the game
+            uiManager.ReturnToGameUI();
+            gameManager.ChangeGameState(GameManager.STATE.Lv1);
+            
         }
     }
 
