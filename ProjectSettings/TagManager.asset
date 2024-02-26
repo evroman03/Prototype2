@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - OneBlock
   - TwoBlock
+  - Tile
   layers:
   - Default
   - TransparentFX

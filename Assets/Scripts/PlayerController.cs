@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -45,6 +46,14 @@ public class PlayerController : MonoBehaviour
         PlayerInput.currentActionMap.FindAction("Restart").performed += Restart;
         PlayerInput.currentActionMap.FindAction("Quit").performed += Quit;
     }
+    void Update()
+    {
+       
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _animator.SetTrigger("Falling");
+        }
+    }
     public void Restart(InputAction.CallbackContext ctx)
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -58,8 +67,8 @@ public class PlayerController : MonoBehaviour
         if (actionToAnimationMap.ContainsKey(actionName))
         {
             string animName = actionToAnimationMap[actionName];
-            string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 2);
-            string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 2);
+            string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
+            string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
             
             if (actionName == "Turn Left Card" || actionName == "Turn Right Card")
             {
@@ -173,22 +182,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Action("hi");
-    }
-    private string CheckSquareType(Vector3 vector)
+
+    private string CheckSquareType(Vector3 offset)
     {
         RaycastHit hit;
-        Vector3 parentScan = transform.parent.position+ vector;
-        Debug.DrawRay(parentScan, -transform.parent.up*3f, Color.red);
-        if(Physics.Raycast(parentScan, -transform.parent.up * 3f, out hit))
+        Vector3 parentScan = transform.parent.position + offset;
+
+        if (Physics.Raycast(parentScan, -transform.parent.up, out hit, 3f))
         {
             return hit.collider.tag.ToString();
         }
-        print("ERROR I DIDNT HIT ANYTHING");
-        return ("");
+        return "";
     }
     /*
     void Jump(InputAction.CallbackContext ctx)
@@ -202,6 +206,12 @@ public class PlayerController : MonoBehaviour
     void CheckFalling()
     {
         UpdatePos();
+        _animator.ResetTrigger("Falling");
+        if (CheckSquareType(transform.parent.position + transform.parent.up).Equals("Tile"))
+        {
+            return;
+        }
+        //_animator.SetTrigger("Falling");
     }
     void UpdatePos()
     {
