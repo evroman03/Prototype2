@@ -42,11 +42,12 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-       /*
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _animator.SetTrigger("Falling");
-        }*/
+        //Debug.DrawLine(transform.parent.position, transform.parent.position + transform.parent.forward + transform.parent.up * 5, Color.red);
+        /*
+         if (Input.GetKeyDown(KeyCode.Space))
+         {
+             _animator.SetTrigger("Falling");
+         }*/
     }
     public void Restart(InputAction.CallbackContext ctx)
     {
@@ -58,12 +59,16 @@ public class PlayerController : MonoBehaviour
     }
     public void CheckIfHasAction()
     {
-        gM.PlaySequence();
+        if(gM.gameState==GameManager.STATE.Lv1)
+        {
+            gM.PlaySequence();
+        }    
     }
     public void Action(string actionName)
     {
-        string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
-        string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
+        string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
+        string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+       
             
         if (actionName == "Turn Left Card")
         {  
@@ -140,9 +145,11 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("FailMove");
+                            print("FOUNDONEBLCOK");
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
+                            print("FOUNDTWOBLCOK");
                             break;
                         default:
                             _animator.SetTrigger("Move");
@@ -160,6 +167,7 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
+                            print("FOUNDTWOBLCOK");
                             break;
                         default:
                             _animator.SetTrigger("Move");
@@ -174,7 +182,10 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-        
+
+        print("THIS " + thisSquare);
+        print("NEXT " + nextSquare);
+        print(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
     }
 
 
