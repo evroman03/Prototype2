@@ -208,6 +208,10 @@ public class GameManager : MonoBehaviour
         }
         ChangeGameState(STATE.ChooseCards);
     }
+    public void PlaySequence()
+    {
+
+    }
 
     //Sets up game to clear a card
     private void ClearAction()

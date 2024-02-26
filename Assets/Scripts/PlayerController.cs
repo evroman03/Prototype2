@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInput PlayerInput;
+    private GameManager gM;
     private Animator _animator;
     //Makes Class a Singleton Class.
     #region Singleton
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator = GetComponent<Animator>();
         }
+        gM = GameManager.Instance;
         //PlayerInput.currentActionMap.FindAction("Jump").started += Jump;
         //PlayerInput.currentActionMap.FindAction("Jump").canceled += JumpCanceled;
         PlayerInput.currentActionMap.FindAction("Restart").performed += Restart;
@@ -54,12 +56,12 @@ public class PlayerController : MonoBehaviour
     {
         Application.Quit();
     }
+    public void CheckIfHasAction()
+    {
+        gM.PlaySequence();
+    }
     public void Action(string actionName)
     {
-        _animator.ResetTrigger("Move");
-        _animator.ResetTrigger("Jump");
-        _animator.ResetTrigger("TurnLeft");
-        _animator.ResetTrigger("TurnRight");
         string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
         string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
             
@@ -127,6 +129,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Move Card")
         {
+            print("HERE");
             switch (thisSquare)
             {
                 case "Ground":
