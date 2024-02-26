@@ -9,14 +9,6 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerInput PlayerInput;
     private Animator _animator;
-    private Dictionary<string, string> actionToAnimationMap = new Dictionary<string, string>
-    {
-        {"Move Card", "Move"},
-        {"Jump Card", "Jump"},
-        {"Turn Left Card", "TurnLeft"},
-        {"Turn Right Card", "TurnRight"}
-        // Add more action names and corresponding animations if we need to
-    };
     //Makes Class a Singleton Class.
     #region Singleton
     private static PlayerController instance;
@@ -48,11 +40,11 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-       
+       /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _animator.SetTrigger("Falling");
-        }
+        }*/
     }
     public void Restart(InputAction.CallbackContext ctx)
     {
@@ -64,121 +56,117 @@ public class PlayerController : MonoBehaviour
     }
     public void Action(string actionName)
     {
-        if (actionToAnimationMap.ContainsKey(actionName))
-        {
-            string animName = actionToAnimationMap[actionName];
-            string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
-            string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
+        string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 3);
+        string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 3);
             
-            if (actionName == "Turn Left Card" || actionName == "Turn Right Card")
+        if (actionName == "Turn Left Card")
+        {
+            
+             _animator.SetTrigger("TurnLeft");
+        }
+        else if (actionName == "Turn Right Card")
+        {
+            _animator.SetTrigger("TurnRight");
+        }
+        else if (actionName == "Jump Card")
+        {
+            switch (thisSquare)
             {
-                _animator.SetTrigger(animName);
-                return; // Exit early; turning doesn't involve square type logic
-            }
-            else if(actionName == "Jump Card")
-            {
-                switch (thisSquare)
-                {
-                    case "Ground":
-                        switch (nextSquare)
-                        {
-                            case "Ground" :
-                                _animator.SetTrigger("Jump");
-                                break;
-                            case "OneBlock":
-                                _animator.SetTrigger("Jump");
-                                break;
-                            case "TwoBlock":
-                                _animator.SetTrigger("FailJump");
-                                break;
-                            default:
-                                _animator.SetTrigger("JumpDown");
-                                break;
-                        }
-                        break;
-                    case "OneBlock":
-                        switch (nextSquare)
-                        {
-                            case "Ground":
-                                _animator.SetTrigger("JumpDown");
-                                break;
-                            case "OneBlock":
-                                _animator.SetTrigger("Jump");
-                                break;
-                            case "TwoBlock":
-                                _animator.SetTrigger("Jump");
-                                break;
-                            default:
-                                _animator.SetTrigger("JumpDown");
-                                break;
-                        }
-                        break;
-                    case "TwoBlock":
-                        switch (nextSquare)
-                        {
-                            case "TwoBlock":
-                                _animator.SetTrigger("Jump");
-                                break;
-                            default:
-                                _animator.SetTrigger("JumpDown");
-                                break;
-                        }
-                        break;
-                    default:
-                        _animator.SetTrigger("Falling");
-                        break;
-                }
-            }
-            else if(actionName == "Move Card")
-            {
-                switch (thisSquare)
-                {
-                    case "Ground":
-                        switch (nextSquare)
-                        {
-                            case "Ground":
-                                _animator.SetTrigger("Move");
-                                break;
-                            case "OneBlock":
-                                _animator.SetTrigger("FailMove");
-                                break;
-                            case "TwoBlock":
-                                _animator.SetTrigger("FailMove");
-                                break;
-                            default:
-                                _animator.SetTrigger("Move");
-                                break;
-                        }
-                        break;
-                    case "OneBlock":
-                        switch (nextSquare)
-                        {
-                            case "Ground":
-                                _animator.SetTrigger("Move");
-                                break;
-                            case "OneBlock":
-                                _animator.SetTrigger("Move");
-                                break;
-                            case "TwoBlock":
-                                _animator.SetTrigger("FailMove");
-                                break;
-                            default:
-                                _animator.SetTrigger("Move");
-                                break;
-                        }
-                        break;
-                    case "TwoBlock":
-                        _animator.SetTrigger("Move");
-                        break;
-                    default:
-                        _animator.SetTrigger("Falling");
-                        break;
-                }
+                case "Ground":
+                    switch (nextSquare)
+                    {
+                        case "Ground":
+                            _animator.SetTrigger("Jump");
+                            break;
+                        case "OneBlock":
+                            _animator.SetTrigger("Jump");
+                            break;
+                        case "TwoBlock":
+                            _animator.SetTrigger("FailJump");
+                            break;
+                        default:
+                            _animator.SetTrigger("JumpDown");
+                            break;
+                    }
+                    break;
+                case "OneBlock":
+                    switch (nextSquare)
+                    {
+                        case "Ground":
+                            _animator.SetTrigger("JumpDown");
+                            break;
+                        case "OneBlock":
+                            _animator.SetTrigger("Jump");
+                            break;
+                        case "TwoBlock":
+                            _animator.SetTrigger("Jump");
+                            break;
+                        default:
+                            _animator.SetTrigger("JumpDown");
+                            break;
+                    }
+                    break;
+                case "TwoBlock":
+                    switch (nextSquare)
+                    {
+                        case "TwoBlock":
+                            _animator.SetTrigger("Jump");
+                            break;
+                        default:
+                            _animator.SetTrigger("JumpDown");
+                            break;
+                    }
+                    break;
+                default:
+                    _animator.SetTrigger("Falling");
+                    break;
             }
         }
-        else
+        else if (actionName == "Move Card")
         {
-            Debug.LogError("MEGA ERROR: Invalid action name or misspelling");
+            switch (thisSquare)
+            {
+                case "Ground":
+                    switch (nextSquare)
+                    {
+                        case "Ground":
+                            _animator.SetTrigger("Move");
+                            break;
+                        case "OneBlock":
+                            _animator.SetTrigger("FailMove");
+                            break;
+                        case "TwoBlock":
+                            _animator.SetTrigger("FailMove");
+                            break;
+                        default:
+                            _animator.SetTrigger("Move");
+                            break;
+                    }
+                    break;
+                case "OneBlock":
+                    switch (nextSquare)
+                    {
+                        case "Ground":
+                            _animator.SetTrigger("Move");
+                            break;
+                        case "OneBlock":
+                            _animator.SetTrigger("Move");
+                            break;
+                        case "TwoBlock":
+                            _animator.SetTrigger("FailMove");
+                            break;
+                        default:
+                            _animator.SetTrigger("Move");
+                            break;
+                    }
+                    break;
+                case "TwoBlock":
+                    _animator.SetTrigger("Move");
+                    break;
+                default:
+                    _animator.SetTrigger("Falling");
+                    break;
+            }
         }
     }
 
