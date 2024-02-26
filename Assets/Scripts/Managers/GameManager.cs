@@ -47,14 +47,6 @@ public class GameManager : MonoBehaviour
         ChangeGameState(STATE.ChooseCards);
     }
 
-    private void Update()
-    {
-        if (gameState == STATE.SwitchCards)
-        {
-            deckManager.SwapTwoCards();
-        }
-    }
-
     /**
      * Resets the game back to its starting conditions
      */
@@ -93,6 +85,10 @@ public class GameManager : MonoBehaviour
                 gameState = STATE.Lv1;
                 RunPlaySequence();
                 break;
+            case STATE.ChooseClear:
+                break;
+            case STATE.SwitchCards:
+                break;
             case STATE.End:
                 gameState = STATE.End;
                 //Add method here if needed
@@ -124,7 +120,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.UpdateDealtCards();
         uiManager.CheckDealtCards();
-        //uiManager.UpdateImages();
+        //uiManager.UpdateDealtCardImages();
     }
 
     public void ShuffleDeck()
@@ -149,8 +145,13 @@ public class GameManager : MonoBehaviour
         //If Clear Card was Played
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Clear Card")
         {
+            deckManager.RemoveLastPlayed();
             print("CEARED ACTION");
-            ClearAction();
+            if (deckManager.GetPlayedCards().Count > 0)
+                ClearAction();
+            else
+                ChangeGameState(STATE.Lv1);
+
             return;
         }
 
@@ -164,8 +165,13 @@ public class GameManager : MonoBehaviour
         //If Switch Card was played
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Switch Card")
         {
+            deckManager.RemoveLastPlayed();
             print("SWITCH ACTION");
-            SwitchAction();
+            if (deckManager.GetPlayedCards().Count > 1)
+                SwitchAction();
+            else
+                ChangeGameState(STATE.Lv1);
+            
             return;
         }
 
@@ -206,7 +212,6 @@ public class GameManager : MonoBehaviour
     //Sets up game to clear a card
     private void ClearAction()
     {
-        deckManager.RemoveLastPlayed();
         removeFirst.gameObject.SetActive(true);
         removeLast.gameObject.SetActive(true);
         ChangeGameState(STATE.ChooseClear);
@@ -215,8 +220,9 @@ public class GameManager : MonoBehaviour
     //Sets up game to switch two cards
     private void SwitchAction()
     {
-        deckManager.RemoveLastPlayed();
-        ChangeGameState(STATE.SwitchCards);
+            uiManager.ShowPlayedCards(false);
+            uiManager.UpdatePlayedCardsImage();
+            ChangeGameState(STATE.SwitchCards);
     }
 
     //Called if the remove first button is clicked
