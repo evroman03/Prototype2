@@ -37,10 +37,9 @@ public class CameraController : MonoBehaviour
         PlayerInput.currentActionMap.FindAction("PanCamera").started += PanCamera;
         PlayerInput.currentActionMap.FindAction("PanCamera").canceled += PanCameraCanceled;
     }
-
     private void Update()
     {
-        while(isMoving)
+        if(isMoving)
         {
             MoveCamera();
         }
@@ -61,12 +60,10 @@ public class CameraController : MonoBehaviour
 
     void MoveCamera()
     {
-
         // Get the CinemachineTrackedDolly from the Virtual Camera
-        
         CinemachineTrackedDolly dolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
 
         // Adjust the position of the dolly based on input
-        dolly.m_PathPosition += panInput/10;
+        dolly.m_PathPosition += panInput;
         }
     }

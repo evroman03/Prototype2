@@ -858,54 +858,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 224195798}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &235278939 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1048932685489177528, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
-  m_PrefabInstance: {fileID: 3215481410530966018}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &235278941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235278939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e48528abd772d664cbbda8d773844cad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerInput: {fileID: 235278942}
---- !u!114 &235278942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235278939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 287740a442f6afc41acf0d0ef18c9db3, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: BaseMap
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &247339110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,6 +1142,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359337000}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &405168808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7548964786283510077, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
+  m_PrefabInstance: {fileID: 3215481410530966018}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &479692140
 GameObject:
   m_ObjectHideFlags: 0
@@ -4320,6 +4283,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 1517165237790635309, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
+      propertyPath: PlayerInput
+      value: 
+      objectReference: {fileID: 3215481410530966019}
+    - target: {fileID: 1517165237790635309, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
+      propertyPath: virtualCamera
+      value: 
+      objectReference: {fileID: 405168808}
     - target: {fileID: 2185706889468418295, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.85275525
@@ -4367,14 +4338,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1048932685489177528, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 235278941}
-    - targetCorrespondingSourceObject: {fileID: 1048932685489177528, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 235278942}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
+--- !u!114 &3215481410530966019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2409389655652410456, guid: 04d5d36471449f343acfc7a0f80fbc0e, type: 3}
+  m_PrefabInstance: {fileID: 3215481410530966018}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
