@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public PlayerInput PlayerInput;
     private GameManager gM;
     private Animator _animator;
+    public List<BlockID> blockIDs;
+
     //Makes Class a Singleton Class.
     #region Singleton
     private static PlayerController instance;
@@ -30,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        BlockID[] allBlocks = FindObjectsOfType<BlockID>();
+        blockIDs = new List<BlockID>(allBlocks);
         if (_animator == null)
         {
             _animator = GetComponent<Animator>();
@@ -64,11 +68,43 @@ public class PlayerController : MonoBehaviour
             gM.PlaySequence();
         }    
     }
+    bool CurrentBlock(BlockID block)
+    {
+        // Check if player's position is close enough to block's position
+        Vector3 blockPos = block.location;
+        Vector3 playerPos = transform.position;
+        float tolerance = 0.25f;
+        return (Mathf.Abs(playerPos.x - blockPos.x) < tolerance) && (Mathf.Abs(playerPos.z - blockPos.z) < tolerance); // Adjust this threshold as needed
+    }
+
+    bool FacingBlock(BlockID block)
+    {
+        Vector3 blockPos = block.location;
+        Vector3 playerPos = transform.position;
+
+        // Calculate the position of the block the player is facing
+        Vector3 nextBlockPos = blockPos + transform.forward;
+
+        return Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
+    }
     public void Action(string actionName)
     {
-        string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
-        string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
-       
+        string thisSquare = "";
+        string nextSquare = "";
+        //string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
+        //string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+        foreach (BlockID block in blockIDs)
+        {
+            if(CurrentBlock(block))            // Check if player is on this block
+            {
+                thisSquare = block.Type.ToString();
+            }
+
+            if (FacingBlock(block))    // Check if player is facing this block
+            {
+                nextSquare= block.Type.ToString();  
+            }
+        }
             
         if (actionName == "Turn Left Card")
         {  
@@ -182,13 +218,13 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
-        //POYOprint("THIS " + thisSquare);
-        //POYOprint("NEXT " + nextSquare);
-        //POYOprint(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+        else if (actionName == "Falling")
+        {
+            _animator.SetTrigger("Falling");
+        }
     }
 
-
+    /*
     private string CheckSquareType(Vector3 offset)
     {
         RaycastHit hit;
@@ -200,7 +236,7 @@ public class PlayerController : MonoBehaviour
         }
         return "";
     }
-    /*
+    
     void Jump(InputAction.CallbackContext ctx)
     {
         _animator.SetTrigger("Jump");
@@ -212,12 +248,7 @@ public class PlayerController : MonoBehaviour
     void CheckFalling()
     {
         UpdatePos();
-        _animator.ResetTrigger("Falling");
-        if (CheckSquareType(transform.parent.position + transform.parent.up).Equals("Tile"))
-        {
-            return;
-        }
-        //_animator.SetTrigger("Falling");
+        Action("Falling");
     }
     void UpdatePos()
     {
