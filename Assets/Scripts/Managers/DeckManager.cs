@@ -352,7 +352,6 @@ public class DeckManager : MonoBehaviour
         //If any other dealt card was clicked
         dealtCards[cardPlacementNumIndex].SetClicked(false);
         playedCards.Add(dealtCards[cardPlacementNumIndex]);
-        dealtCards.RemoveAt(cardPlacementNumIndex);
         uiManager.UpdatePlayedCardsImage();
     }
 
@@ -569,6 +568,22 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < dealtCardsSize; i++)
         {
             print(dealtCards[i].name);
+        }
+    }
+
+    /**
+     * Prints a list
+     * @Param list - a List<Card> to print
+     */
+    public void PrintList(List<Card> list)
+    {
+        //Gets the list size
+        int listSize = list.Count;
+
+        //Prints list
+        for (int i = 0; i <  listSize; i++)
+        {
+            print(list[i].name);
         }
     }
 }

@@ -34,13 +34,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int numOfShuffles = 3;
 
     [SerializeField] private Button removeFirst, removeLast;
-    private PlayerController pC;
+    private PlayerController playerController;
+
+    private List<Card> playedCards;
+    [SerializeField] private List<Card> tempPlayedCards;
+    private List<Card> tempBeforeBackToItCards, tempAfterBackToItCards;
     // Start is called before the first frame update
     void Start()
     {
-        pC = PlayerController.Instance;
+        playerController = PlayerController.Instance;
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
+        playedCards = new List<Card>();
+        tempPlayedCards = new List<Card>();
+
+        tempBeforeBackToItCards = new List<Card>();
+        tempAfterBackToItCards = new List<Card>();
 
         //Sets the game state to menu
         ChangeGameState(STATE.Menu);
@@ -86,8 +95,10 @@ public class GameManager : MonoBehaviour
                 RunPlaySequence();
                 break;
             case STATE.ChooseClear:
+                gameState = STATE.ChooseClear;
                 break;
             case STATE.SwitchCards:
+                gameState = STATE.SwitchCards;
                 break;
             case STATE.End:
                 gameState = STATE.End;
@@ -140,7 +151,18 @@ public class GameManager : MonoBehaviour
         deckManager.ReturnDealtCards();
         deckManager.ShuffleDeck();
         
-        List<Card> playedCards = deckManager.GetPlayedCards();
+        playedCards = deckManager.GetPlayedCards();
+
+        //Clears the temporary played cards
+        tempPlayedCards.Clear();
+
+        int playedCardsCount = playedCards.Count;
+
+        //Adds copies of the cards into a temporary list
+        for (int i = 0; i < playedCardsCount ; i++)
+        {
+            tempPlayedCards.Add(playedCards[i]);
+        }
 
         //If Clear Card was Played
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Clear Card")
@@ -155,13 +177,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        //If Back To It Card was played
-        if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Back To It Card")
-        {
-            print("BACK TO IT ACTION");
-            deckManager.RemoveLastPlayed();
-        }
-
         //If Switch Card was played
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Switch Card")
         {
@@ -174,43 +189,40 @@ public class GameManager : MonoBehaviour
             
             return;
         }
-
-        //Plays the sequence of cards in order
-        int playedCardsSize = playedCards.Count;
-        for (int i = 0; i < playedCardsSize; i++) {
-            switch (playedCards[i].name) {
-                case "Move Card":
-                    pC.Action(playedCards[i].name);
-                    print("MOVED");                   
-                    //TODO - Call PlayerMovement Move Method Here!
-                    break;
-                case "Jump Card":
-                    pC.Action(playedCards[i].name);
-                    print("JUMPED");                    
-                    //TODO - Call PlayerMovement Jump Method Here!
-                    break;
-                case "Turn Right Card":
-                    print("TURNED RIGHT");
-                    pC.Action(playedCards[i].name);
-                    //TODO - Call PlayerMovement Turn Right Method Here!
-                    break;
-                case "Turn Left Card":
-                    pC.Action(playedCards[i].name);
-                    print("TURNED LEFT");
-
-                    //TODO - Call PlayerMovement Turn Left Method Here!
-                    break;
-                //TODO - Call PlayerMovement Turn Left Method Here!
-                default:
-                    print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
-                    break;
-            }
-        }
-        ChangeGameState(STATE.ChooseCards);
     }
     public void PlaySequence()
     {
-
+        if(tempPlayedCards.Count < 1) {
+            ChangeGameState(STATE.ChooseCards);
+            return;
+        }
+        switch (tempPlayedCards[0].name)
+        {
+            case "Move Card":
+                playerController.Action(tempPlayedCards[0].name);
+                //print("MOVED");
+                break;
+            case "Jump Card":
+                playerController.Action(tempPlayedCards[0].name);
+                //print("JUMPED");
+                break;
+            case "Turn Right Card":
+                //print("TURNED RIGHT");
+                playerController.Action(tempPlayedCards[0].name);
+                break;
+            case "Turn Left Card":
+                playerController.Action(tempPlayedCards[0].name);
+                //print("TURNED LEFT");
+                break;
+            case "Back To It Card":
+                //print("BACKED TO IT);
+                BackToItAction();
+                break;
+            default:
+                print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
+                break;
+        }
+        tempPlayedCards.RemoveAt(0);
     }
 
     //Sets up game to clear a card
@@ -221,12 +233,69 @@ public class GameManager : MonoBehaviour
         ChangeGameState(STATE.ChooseClear);
     }
 
+    //Sets up Back To It Card function
+    private void BackToItAction()
+    {
+        tempBeforeBackToItCards.Clear();
+        tempAfterBackToItCards.Clear();
+        //Gets index of BackToIt card
+        int playedCardsSize = playedCards.Count;
+        int backToItIndex = -1;
+        for (int i = 0; i < playedCardsSize; i++)
+        {
+            if (playedCards[i].name == "Back To It Card")
+            {
+                backToItIndex = i;
+                break;
+            }
+        }
+
+        //Copies all cards before BackToIt Card
+        for (int i = 0; i < backToItIndex; i++)
+        {
+            //Ignores previous Back To It Cards
+            if (playedCards[i].name != "Back To It")
+            {
+                print("FOUND BEFORE " + playedCards[i]);
+                tempBeforeBackToItCards.Add(playedCards[i]);
+            }
+        }
+        //Copies all cards after BackToIt Card
+        for (int i = backToItIndex + 1; i < playedCardsSize; i++)
+        {
+            print("FOUND AFTER " + playedCards[i]);
+            tempAfterBackToItCards.Add(playedCards[i]);
+        }
+
+        //Clears the tempPlayedCardsList
+        tempPlayedCards.Clear();
+
+        //Adds card to be removed at front of list ( due to RemoveAt(0) at the end of PlaySequence() )
+        tempPlayedCards.Add(playedCards[backToItIndex]);
+
+        //Adds all cards before Back To It into the list
+        int beforeBackToItSize = tempBeforeBackToItCards.Count;
+        print("Size = " + beforeBackToItSize);
+        for (int i = 0; i < beforeBackToItSize; i++)
+        {
+            print("CARD ADDED " + tempBeforeBackToItCards[i]);
+            tempPlayedCards.Add(tempBeforeBackToItCards[i]);
+        }
+
+        //Adds all cards after Back To It into the list
+        int afterBackToItSize = tempAfterBackToItCards.Count;
+        for (int i = 0;i < afterBackToItSize; i++)
+        {
+            tempPlayedCards.Add(tempAfterBackToItCards[i]);
+        }
+    }
+
     //Sets up game to switch two cards
     private void SwitchAction()
     {
-            uiManager.ShowPlayedCards(false);
-            uiManager.UpdatePlayedCardsImage();
-            ChangeGameState(STATE.SwitchCards);
+        ChangeGameState(STATE.SwitchCards);
+        uiManager.ShowPlayedCards(false);
+        uiManager.UpdatePlayedCardsImage();
     }
 
     //Called if the remove first button is clicked

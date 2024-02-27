@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Move Card")
         {
-            print("HERE");
+            //POYOprint("HERE");
             switch (thisSquare)
             {
                 case "Ground":
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
-                            print("FOUNDTWOBLCOK");
+                            //POYOprint("FOUNDTWOBLCOK");
                             break;
                         default:
                             _animator.SetTrigger("Move");
@@ -183,9 +183,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        print("THIS " + thisSquare);
-        print("NEXT " + nextSquare);
-        print(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+        //POYOprint("THIS " + thisSquare);
+        //POYOprint("NEXT " + nextSquare);
+        //POYOprint(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
     }
 
 

@@ -157,6 +157,7 @@ public class UIManager : MonoBehaviour
                         dealtCardsCount--;
                         CheckDealtCards();
                         UpdateReadyText();
+                        UpdateDealtCardsImages();
                         break;
                     }
                 }
@@ -200,7 +201,7 @@ public class UIManager : MonoBehaviour
     public void PlayedCardClicked(int cardClicked)
     {
         //Checks the GameState
-        if (gameManager.gameState == GameManager.STATE.SwitchCards || gameManager.gameState == GameManager.STATE.Lv1) {
+        if (gameManager.gameState == GameManager.STATE.SwitchCards) {
             playedCardsData = deckManager.GetPlayedCards();
             int playedCardsCount = playedCardsData.Count;
 
@@ -225,21 +226,24 @@ public class UIManager : MonoBehaviour
         //Gathers stored card data
         storedCardData = deckManager.GetStoredCard();
 
+        //Gets how many dealt cards there are
+        int dealtCardsCount = dealtCards.Count;
+
         //Checks if the data is not null
         //If it is not null, display the correct image
-        if (dealtCards[0] != null)
+        if (dealtCardsCount > 0 && dealtCards[0] != null)
         {
             UpdateImageSprite(dealtCard1, 0, true);
         }
-        if (dealtCards[1] != null)
+        if (dealtCardsCount > 1 && dealtCards[1] != null)
         {
             UpdateImageSprite(dealtCard2, 1, true);
         }
-        if (dealtCards[2] != null)
+        if (dealtCardsCount > 2 && dealtCards[2] != null)
         {
             UpdateImageSprite(dealtCard3, 2, true);
         }
-        if (dealtCards[3] != null)
+        if (dealtCardsCount > 3 && dealtCards[3] != null)
         {
             UpdateImageSprite(dealtCard4, 3, true);
         }
@@ -284,6 +288,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /**
+     * Updates the played cards sprites
+     */
     public void UpdatePlayedCardsImage()
     {
         playedCardsData = deckManager.GetPlayedCards();
