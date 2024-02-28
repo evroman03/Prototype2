@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     private List<Card> playedCards;
     [SerializeField] private List<Card> tempPlayedCards;
     private List<Card> tempBeforeBackToItCards, tempAfterBackToItCards;
+    private int lastBackToItIndex;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
 
         tempBeforeBackToItCards = new List<Card>();
         tempAfterBackToItCards = new List<Card>();
+        lastBackToItIndex = -1;
 
         //Sets the game state to menu
         ChangeGameState(STATE.Menu);
@@ -150,6 +152,7 @@ public class GameManager : MonoBehaviour
     {
         deckManager.ReturnDealtCards();
         deckManager.ShuffleDeck();
+        lastBackToItIndex = -1;
         
         playedCards = deckManager.GetPlayedCards();
 
@@ -240,28 +243,46 @@ public class GameManager : MonoBehaviour
         tempAfterBackToItCards.Clear();
         //Gets index of BackToIt card
         int playedCardsSize = playedCards.Count;
-        int backToItIndex = -1;
-        for (int i = 0; i < playedCardsSize; i++)
+
+        //If this is first instance of BackToIt in playedCards
+        if (lastBackToItIndex == -1)
         {
-            if (playedCards[i].name == "Back To It Card")
+            //Gets the first instance of BackToIt's index in playedCards
+            for (int i = 0; i < playedCardsSize; i++)
             {
-                backToItIndex = i;
-                break;
+                if (playedCards[i].name == "Back To It Card")
+                {
+                    lastBackToItIndex = i;
+                    break;
+                }
+            }
+        }
+        //If this is the second or greater instance of BackToIt in playedCards
+        else
+        {
+            //Gets the next instance of BackToIt's index in playedCards
+            for (int i = lastBackToItIndex + 1; i < playedCardsSize; i++)
+            {
+                if (playedCards[i].name == "Back To It Card")
+                {
+                    lastBackToItIndex = i;
+                    break;
+                }
             }
         }
 
         //Copies all cards before BackToIt Card
-        for (int i = 0; i < backToItIndex; i++)
+        for (int i = 0; i < lastBackToItIndex; i++)
         {
             //Ignores previous Back To It Cards
-            if (playedCards[i].name != "Back To It")
+            if (playedCards[i].name != "Back To It Card")
             {
                 print("FOUND BEFORE " + playedCards[i]);
                 tempBeforeBackToItCards.Add(playedCards[i]);
             }
         }
         //Copies all cards after BackToIt Card
-        for (int i = backToItIndex + 1; i < playedCardsSize; i++)
+        for (int i = lastBackToItIndex + 1; i < playedCardsSize; i++)
         {
             print("FOUND AFTER " + playedCards[i]);
             tempAfterBackToItCards.Add(playedCards[i]);
@@ -271,7 +292,7 @@ public class GameManager : MonoBehaviour
         tempPlayedCards.Clear();
 
         //Adds card to be removed at front of list ( due to RemoveAt(0) at the end of PlaySequence() )
-        tempPlayedCards.Add(playedCards[backToItIndex]);
+        tempPlayedCards.Add(playedCards[lastBackToItIndex]);
 
         //Adds all cards before Back To It into the list
         int beforeBackToItSize = tempBeforeBackToItCards.Count;
