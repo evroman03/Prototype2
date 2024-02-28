@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         // Check if player's position is close enough to block's position
         Vector3 blockPos = block.location;
-        Vector3 playerPos = transform.position;
+        Vector3 playerPos = transform.parent.position;
         float tolerance = 0.25f;
         return (Mathf.Abs(playerPos.x - blockPos.x) < tolerance) && (Mathf.Abs(playerPos.z - blockPos.z) < tolerance); // Adjust this threshold as needed
     }
@@ -80,10 +80,10 @@ public class PlayerController : MonoBehaviour
     bool FacingBlock(BlockID block)
     {
         Vector3 blockPos = block.location;
-        Vector3 playerPos = transform.position;
+        Vector3 playerPos = transform.parent.position;
 
         // Calculate the position of the block the player is facing
-        Vector3 nextBlockPos = blockPos + transform.forward;
+        Vector3 nextBlockPos = blockPos + -transform.parent.forward;
 
         return Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
     }
@@ -98,11 +98,19 @@ public class PlayerController : MonoBehaviour
             if(CurrentBlock(block))            // Check if player is on this block
             {
                 thisSquare = block.Type.ToString();
+                if(thisSquare == "StartBlock")
+                {
+                    thisSquare = "Ground";
+                }
             }
 
             if (FacingBlock(block))    // Check if player is facing this block
             {
-                nextSquare= block.Type.ToString();  
+                nextSquare= block.Type.ToString();
+                if (nextSquare == "StartBlock")
+                {
+                    nextSquare = "Ground";
+                }
             }
         }
             
@@ -222,6 +230,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetTrigger("Falling");
         }
+        print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
     }
 
     /*
