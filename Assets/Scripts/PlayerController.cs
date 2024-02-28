@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private GameManager gM;
     private Animator _animator;
     public List<BlockID> blockIDs;
+    bool isFalling = false;
 
     //Makes Class a Singleton Class.
     #region Singleton
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         string nextSquare = "";
         //string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
         //string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+
         foreach (BlockID block in blockIDs)
         {
             if(CurrentBlock(block))            // Check if player is on this block
@@ -228,9 +232,34 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Falling")
         {
-            _animator.SetTrigger("Falling");
+            switch (nextSquare)
+            {
+                case "Ground":
+                    if(transform.parent.position.y > 1.01f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                case "OneBlock":
+                    if (transform.parent.position.y > 2f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                case "TwoBlock":
+                    if (transform.parent.position.y > 3f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                default:
+                    _animator.SetTrigger("Falling");
+                    break;
+            }
+            return;
         }
-        print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
+        //print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
+        //CheckFalling();
     }
 
     /*
@@ -256,12 +285,15 @@ public class PlayerController : MonoBehaviour
     }*/
     void CheckFalling()
     {
-        UpdatePos();
+        //UpdatePos();
+        //transform.parent.position = gameObject.transform.position;
+        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
         Action("Falling");
     }
     void UpdatePos()
     {
         transform.parent.position = gameObject.transform.position;
+        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
     }
     void UpdateRot()
     {
