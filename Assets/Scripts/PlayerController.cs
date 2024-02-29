@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private GameManager gM;
     private Animator _animator;
     public List<BlockID> blockIDs;
+    public BlockID currentBlock;
     bool isFalling = false;
 
     //Makes Class a Singleton Class.
@@ -87,8 +88,13 @@ public class PlayerController : MonoBehaviour
 
         // Calculate the position of the block the player is facing
         Vector3 nextBlockPos = blockPos + -transform.parent.forward;
+        bool isTrue = Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
 
-        return Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
+        if (isTrue)
+        {
+            currentBlock = block;
+        }
+        return isTrue;
     }
     public void Action(string actionName)
     {
@@ -287,7 +293,9 @@ public class PlayerController : MonoBehaviour
     {
         //UpdatePos();
         //transform.parent.position = gameObject.transform.position;
-        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+
+        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        transform.parent.position = new Vector3(currentBlock.location.x, currentBlock.location.y+0.75f, currentBlock.location.z);
         Action("Falling");
     }
     void UpdatePos()
