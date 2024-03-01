@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private GameManager gM;
     private Animator _animator;
     public List<BlockID> blockIDs;
+    public BlockID currentBlock;
+    bool isFalling = false;
 
     //Makes Class a Singleton Class.
     #region Singleton
@@ -84,8 +88,13 @@ public class PlayerController : MonoBehaviour
 
         // Calculate the position of the block the player is facing
         Vector3 nextBlockPos = blockPos + -transform.parent.forward;
+        bool isTrue = Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
 
-        return Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
+        if (isTrue)
+        {
+            currentBlock = block;
+        }
+        return isTrue;
     }
     public void Action(string actionName)
     {
@@ -93,6 +102,7 @@ public class PlayerController : MonoBehaviour
         string nextSquare = "";
         //string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
         //string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
+
         foreach (BlockID block in blockIDs)
         {
             if(CurrentBlock(block))            // Check if player is on this block
@@ -228,9 +238,34 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Falling")
         {
-            _animator.SetTrigger("Falling");
+            switch (nextSquare)
+            {
+                case "Ground":
+                    if(transform.parent.position.y > 1.01f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                case "OneBlock":
+                    if (transform.parent.position.y > 2f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                case "TwoBlock":
+                    if (transform.parent.position.y > 3f)
+                    {
+                        _animator.SetTrigger("Falling");
+                    }
+                    break;
+                default:
+                    _animator.SetTrigger("Falling");
+                    break;
+            }
+            return;
         }
-        print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
+        //print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
+        //CheckFalling();
     }
 
     /*
@@ -256,12 +291,17 @@ public class PlayerController : MonoBehaviour
     }*/
     void CheckFalling()
     {
-        UpdatePos();
+        //UpdatePos();
+        //transform.parent.position = gameObject.transform.position;
+
+        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        transform.parent.position = new Vector3(currentBlock.location.x, currentBlock.location.y+0.75f, currentBlock.location.z);
         Action("Falling");
     }
     void UpdatePos()
     {
         transform.parent.position = gameObject.transform.position;
+        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
     }
     void UpdateRot()
     {
