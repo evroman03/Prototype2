@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button removeFirst, removeLast;
     private PlayerController playerController;
 
-    private List<Card> playedCards;
+    private List<Card> dealtCards, playedCards;
     [SerializeField] private List<Card> tempPlayedCards;
     private List<Card> tempBeforeBackToItCards, tempAfterBackToItCards;
     private int lastBackToItIndex;
@@ -122,18 +122,103 @@ public class GameManager : MonoBehaviour
 
     private void DealCards()
     {
-        int deckSize = deckManager.GetDeck().Count;
-        for (int i = 0; i < cardsToDeal; i++)
-        {
-            if (deckSize > 0)
-                deckManager.DealCard();
-        }
-        deckManager.UpdateStoredCardWait();
-        uiManager.UpdateReadyText();
+        //If there are no cards played
+        if (playedCards.Count < 1) {
+            bool isValid = false;
+            //Make sure dealt cards do not include Switch or Clear cards
+            while (!isValid)
+            {
+                deckManager.ReturnDealtCards();
+                deckManager.ShuffleDeck();
 
-        uiManager.UpdateDealtCards();
-        uiManager.CheckDealtCards();
-        uiManager.UpdateDealtCardsImages();
+                isValid = true;
+                int deckSize = deckManager.GetDeck().Count;
+                for (int i = 0; i < cardsToDeal; i++)
+                {
+                    if (deckSize > i)
+                        deckManager.DealCard();
+                }
+
+                //Checks if any card is a Swap or Clear card
+                dealtCards = deckManager.GetDealtCards();
+                int dealtCardsSize = dealtCards.Count;
+                for (int i = 0; i < dealtCardsSize; i++)
+                {
+                    if (dealtCards[i].name == "Clear Card" || dealtCards[i].name == "Switch Card")
+                    {
+                        isValid = false;
+                        print("FOUND");
+                        break;
+                    }
+                }
+            }
+
+            //Updates UI and other variables
+            deckManager.UpdateStoredCardWait();
+            uiManager.UpdateReadyText();
+
+            uiManager.UpdateDealtCards();
+            uiManager.CheckDealtCards();
+            uiManager.UpdateDealtCardsImages();
+
+            playedCards = deckManager.GetPlayedCards();
+
+        } else if (playedCards.Count == 2) {
+            bool isValid = false;
+            //Make sure dealt cards do not include the Switch Card
+            while (!isValid)
+            {
+                deckManager.ReturnDealtCards();
+                deckManager.ShuffleDeck();
+
+                isValid = true;
+                int deckSize = deckManager.GetDeck().Count;
+                for (int i = 0; i < cardsToDeal; i++)
+                {
+                    if (deckSize > i)
+                        deckManager.DealCard();
+                }
+
+                //Checks if any card is a Swap Card
+                dealtCards = deckManager.GetDealtCards();
+                int dealtCardsSize = dealtCards.Count;
+                for (int i = 0; i < dealtCardsSize; i++)
+                {
+                    if (dealtCards[i].name == "Switch Card")
+                    {
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+
+            //Updates UI and other variables
+            deckManager.UpdateStoredCardWait();
+            uiManager.UpdateReadyText();
+
+            uiManager.UpdateDealtCards();
+            uiManager.CheckDealtCards();
+            uiManager.UpdateDealtCardsImages();
+
+            playedCards = deckManager.GetPlayedCards();
+
+        } else {
+            //Draw normally
+            int deckSize = deckManager.GetDeck().Count;
+            for (int i = 0; i < cardsToDeal; i++)
+            {
+                if (deckSize > i)
+                    deckManager.DealCard();
+            }
+            deckManager.UpdateStoredCardWait();
+            uiManager.UpdateReadyText();
+
+            uiManager.UpdateDealtCards();
+            uiManager.CheckDealtCards();
+            uiManager.UpdateDealtCardsImages();
+
+            playedCards = deckManager.GetPlayedCards();
+        }
     }
 
     public void ShuffleDeck()
