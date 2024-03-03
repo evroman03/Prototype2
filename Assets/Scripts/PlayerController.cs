@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private GameManager gM;
     private Animator _animator;
     public List<BlockID> blockIDs;
+    public BlockID facingBlock;
     bool isFalling = false;
 
     //Makes Class a Singleton Class.
@@ -87,8 +89,13 @@ public class PlayerController : MonoBehaviour
 
         // Calculate the position of the block the player is facing
         Vector3 nextBlockPos = blockPos + -transform.parent.forward;
+        bool isTrue = Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
 
-        return Mathf.Abs(playerPos.x - nextBlockPos.x) < 0.5f && Mathf.Abs(playerPos.z - nextBlockPos.z) < 0.5f;
+        if (isTrue)
+        {
+            facingBlock = block;
+        }
+        return isTrue;
     }
     public void Action(string actionName)
     {
@@ -97,6 +104,7 @@ public class PlayerController : MonoBehaviour
         //string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
         //string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
 
+        bool isOnABlock = false;
         foreach (BlockID block in blockIDs)
         {
             if(CurrentBlock(block))            // Check if player is on this block
@@ -106,8 +114,12 @@ public class PlayerController : MonoBehaviour
                 {
                     thisSquare = "Ground";
                 }
+                if(thisSquare == "FinishBlock")
+                {
+                    SceneManager.LoadScene(4);
+                }
+                isOnABlock= true;
             }
-
             if (FacingBlock(block))    // Check if player is facing this block
             {
                 nextSquare= block.Type.ToString();
@@ -116,6 +128,11 @@ public class PlayerController : MonoBehaviour
                     nextSquare = "Ground";
                 }
             }
+            
+        }
+        if(!isOnABlock)
+        {
+            _animator.SetTrigger("Falling");
         }
             
         if (actionName == "Turn Left Card")
@@ -232,17 +249,19 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Falling")
         {
-            switch (nextSquare)
+            switch (facingBlock.Type.ToString())
             {
                 case "Ground":
                     if(transform.parent.position.y > 1.01f)
                     {
+                        print("GROUND");
                         _animator.SetTrigger("Falling");
                     }
                     break;
                 case "OneBlock":
                     if (transform.parent.position.y > 2f)
                     {
+                        print("ONE");
                         _animator.SetTrigger("Falling");
                     }
                     break;
@@ -260,6 +279,25 @@ public class PlayerController : MonoBehaviour
         }
         //print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
         //CheckFalling();
+        foreach (BlockID block in blockIDs)
+        {
+            if (CurrentBlock(block))            // Check if player is on this block
+            {
+                thisSquare = block.Type.ToString();
+                if (thisSquare == "StartBlock")
+                {
+                    thisSquare = "Ground";
+                }
+            }
+            if (FacingBlock(block))    // Check if player is facing this block
+            {
+                nextSquare = block.Type.ToString();
+                if (nextSquare == "StartBlock")
+                {
+                    nextSquare = "Ground";
+                }
+            }
+        }
     }
 
     /*
@@ -287,7 +325,8 @@ public class PlayerController : MonoBehaviour
     {
         //UpdatePos();
         //transform.parent.position = gameObject.transform.position;
-        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        //transform.parent.position = new Vector3(facingBlock.location.x, /*facingBlock.location.y+facingBlock.height,*/transform.position.y, facingBlock.location.z);
         Action("Falling");
     }
     void UpdatePos()
