@@ -252,21 +252,21 @@ public class PlayerController : MonoBehaviour
             switch (facingBlock.Type.ToString())
             {
                 case "Ground":
-                    if(transform.parent.position.y > 1.01f)
+                    if(transform.parent.position.y > 1.7f)
                     {
                         print("GROUND");
                         _animator.SetTrigger("Falling");
                     }
                     break;
                 case "OneBlock":
-                    if (transform.parent.position.y > 2f)
+                    if (transform.parent.position.y > 2.7f)
                     {
                         print("ONE");
                         _animator.SetTrigger("Falling");
                     }
                     break;
                 case "TwoBlock":
-                    if (transform.parent.position.y > 3f)
+                    if (transform.parent.position.y > 3.7f)
                     {
                         _animator.SetTrigger("Falling");
                     }
