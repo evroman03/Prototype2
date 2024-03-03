@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private GameManager gM;
     private Animator _animator;
     public List<BlockID> blockIDs;
-    public BlockID currentBlock;
+    public BlockID facingBlock;
     bool isFalling = false;
 
     //Makes Class a Singleton Class.
@@ -92,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
         if (isTrue)
         {
-            currentBlock = block;
+            facingBlock = block;
         }
         return isTrue;
     }
@@ -103,6 +104,7 @@ public class PlayerController : MonoBehaviour
         //string thisSquare = CheckSquareType(transform.parent.position + transform.parent.up * 5);
         //string nextSquare = CheckSquareType(transform.parent.position + transform.parent.forward + transform.parent.up * 5);
 
+        bool isOnABlock = false;
         foreach (BlockID block in blockIDs)
         {
             if(CurrentBlock(block))            // Check if player is on this block
@@ -112,8 +114,8 @@ public class PlayerController : MonoBehaviour
                 {
                     thisSquare = "Ground";
                 }
+                isOnABlock= true;
             }
-
             if (FacingBlock(block))    // Check if player is facing this block
             {
                 nextSquare= block.Type.ToString();
@@ -122,6 +124,11 @@ public class PlayerController : MonoBehaviour
                     nextSquare = "Ground";
                 }
             }
+            
+        }
+        if(!isOnABlock)
+        {
+            _animator.SetTrigger("Falling");
         }
             
         if (actionName == "Turn Left Card")
@@ -266,6 +273,25 @@ public class PlayerController : MonoBehaviour
         }
         //print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
         //CheckFalling();
+        foreach (BlockID block in blockIDs)
+        {
+            if (CurrentBlock(block))            // Check if player is on this block
+            {
+                thisSquare = block.Type.ToString();
+                if (thisSquare == "StartBlock")
+                {
+                    thisSquare = "Ground";
+                }
+            }
+            if (FacingBlock(block))    // Check if player is facing this block
+            {
+                nextSquare = block.Type.ToString();
+                if (nextSquare == "StartBlock")
+                {
+                    nextSquare = "Ground";
+                }
+            }
+        }
     }
 
     /*
@@ -293,9 +319,9 @@ public class PlayerController : MonoBehaviour
     {
         //UpdatePos();
         //transform.parent.position = gameObject.transform.position;
-
-        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
-        transform.parent.position = new Vector3(currentBlock.location.x, currentBlock.location.y+0.75f, currentBlock.location.z);
+        print("HERE");
+        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        //transform.parent.position = new Vector3(facingBlock.location.x, /*facingBlock.location.y+facingBlock.height,*/transform.position.y, facingBlock.location.z);
         Action("Falling");
     }
     void UpdatePos()
