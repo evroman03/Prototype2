@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public STATE gameState;
     [SerializeField] private DeckManager deckManager;
     [SerializeField] private UIManager uiManager;
+    [SerializeField] private PlayerEndTrigger endTrigger;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
     [SerializeField] private int cardsToDeal = 4;
@@ -61,7 +62,7 @@ public class GameManager : MonoBehaviour
     /**
      * Resets the game back to its starting conditions
      */
-    private void Reset()
+    public void Reset()
     {
         //Resets the decks
         deckManager.BuildDeck();
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
         player.transform.rotation *= Quaternion.Euler(0, 0, 0);
 
         //Resets Game State
-        ChangeGameState(STATE.Menu);
+        ChangeGameState(STATE.ChooseCards);
 
     }
 
@@ -118,6 +119,8 @@ public class GameManager : MonoBehaviour
         deckManager.InitDeckManager();
         uiManager.InitUIManager();
         deckManager.BuildDeck();
+        endTrigger.InitTrigger();
+        player.transform.position = playerStartingLocation;
     }
 
     private void DealCards()
@@ -147,7 +150,6 @@ public class GameManager : MonoBehaviour
                     if (dealtCards[i].name == "Clear Card" || dealtCards[i].name == "Switch Card")
                     {
                         isValid = false;
-                        print("FOUND");
                         break;
                     }
                 }
@@ -310,6 +312,7 @@ public class GameManager : MonoBehaviour
                 print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
                 break;
         }
+        print("PLAYED");
         tempPlayedCards.RemoveAt(0);
     }
 

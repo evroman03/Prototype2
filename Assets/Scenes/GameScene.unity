@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -949,6 +949,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 648829891298421260, guid: 55d68b9072e62484292469cf68638722, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 1792039372742694772, guid: 55d68b9072e62484292469cf68638722, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1
@@ -2629,6 +2633,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864163336}
   m_CullTransparentMesh: 1
+--- !u!1 &885695731 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1299437257010913190, guid: b4dee9fbde86658488d4a044bfe72fc4, type: 3}
+  m_PrefabInstance: {fileID: 1872712564}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &885695733
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885695731}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &885695735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885695731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b672cb5a34cc7344a5c386ab9bb5222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &897647846
 GameObject:
   m_ObjectHideFlags: 0
@@ -4429,6 +4477,7 @@ MonoBehaviour:
   gameState: 0
   deckManager: {fileID: 175265908}
   uiManager: {fileID: 595744226}
+  endTrigger: {fileID: 885695735}
   player: {fileID: 0}
   playerStartingLocation: {x: 0, y: 1, z: 0}
   cardsToDeal: 4
@@ -4999,7 +5048,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1299437257010913190, guid: b4dee9fbde86658488d4a044bfe72fc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 885695733}
+    - targetCorrespondingSourceObject: {fileID: 1299437257010913190, guid: b4dee9fbde86658488d4a044bfe72fc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 885695735}
   m_SourcePrefab: {fileID: 100100000, guid: b4dee9fbde86658488d4a044bfe72fc4, type: 3}
 --- !u!1 &1937944051
 GameObject:
