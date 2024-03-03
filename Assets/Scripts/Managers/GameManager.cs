@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
      */
     public void Reset()
     {
+        /*
         //Resets the decks
         deckManager.BuildDeck();
         deckManager.ClearDealtCards();
@@ -77,6 +78,8 @@ public class GameManager : MonoBehaviour
 
         //Resets Game State
         ChangeGameState(STATE.ChooseCards);
+        */
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
     }
 
@@ -165,7 +168,7 @@ public class GameManager : MonoBehaviour
 
             playedCards = deckManager.GetPlayedCards();
 
-        } else if (playedCards.Count == 2) {
+        } else if (playedCards.Count == 1) {
             bool isValid = false;
             //Make sure dealt cards do not include the Switch Card
             while (!isValid)
@@ -181,7 +184,7 @@ public class GameManager : MonoBehaviour
                         deckManager.DealCard();
                 }
 
-                //Checks if any card is a Swap Card
+                //Checks if any card is a Switch Card
                 dealtCards = deckManager.GetDealtCards();
                 int dealtCardsSize = dealtCards.Count;
                 for (int i = 0; i < dealtCardsSize; i++)
