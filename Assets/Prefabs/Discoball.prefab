@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 7074623140645843763}
   m_Layer: 0
   m_Name: Discoball
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
