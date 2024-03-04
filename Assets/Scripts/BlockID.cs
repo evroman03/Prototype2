@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
 
 public class BlockID : MonoBehaviour
@@ -38,9 +37,5 @@ public class BlockID : MonoBehaviour
                 height = 0.75f;
                 break;
         }
-    }
-    void Update()
-    {
-        
     }
 }
