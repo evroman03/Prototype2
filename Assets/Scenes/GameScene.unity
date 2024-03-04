@@ -4477,7 +4477,7 @@ MonoBehaviour:
   endTrigger: {fileID: 885695735}
   player: {fileID: 1507224370}
   playerStartingLocation: {x: -1, y: 0.75, z: 0}
-  runFrontToBack: 1
+  runFrontToBack: 0
   cardsToDeal: 4
   numOfShuffles: 3
   removeFirst: {fileID: 1530678337}

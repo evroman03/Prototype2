@@ -419,6 +419,7 @@ public class GameManager : MonoBehaviour
         deckManager.RemoveFirstPlayed();
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
+        uiManager.UpdatePlayedCardsImage();
         ChangeGameState(STATE.Lv1);
     }
 
@@ -428,6 +429,7 @@ public class GameManager : MonoBehaviour
         deckManager.RemoveLastPlayed();
         removeFirst.gameObject.SetActive(false);
         removeLast.gameObject.SetActive(false);
+        uiManager.UpdatePlayedCardsImage();
         ChangeGameState(STATE.Lv1);
     }
 
