@@ -797,12 +797,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Left Mouse Click - Use buttons/Choose a card
-
-    Escape - Quit
-
-    R
-    - Restart'
+  m_text: "Use the Left Mouse Button to Select your card, and click play to play
+    the selected card. \n\nEach card you choose goes into an order that repeats whenever
+    you choose the next card. (Press Show Played Cards Button to see order)\n\nYou
+    have 3 shuffles that you can use per level. \n\nYou can store 1 card to use at
+    a later point in the level."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -836,7 +835,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -865,7 +864,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -374.229, y: 0, z: -376.0954, w: -57.37214}
+  m_margin: {x: -713.7405, y: 0, z: -715.03815, w: -57.37214}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
