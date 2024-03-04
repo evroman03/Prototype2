@@ -127,6 +127,10 @@ public class PlayerController : MonoBehaviour
                 {
                     nextSquare = "Ground";
                 }
+                if(nextSquare == "FinishBlock")
+                {
+                    nextSquare = "Ground";
+                }
             }
             
         }
