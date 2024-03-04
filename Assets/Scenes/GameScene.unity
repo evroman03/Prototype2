@@ -1736,13 +1736,13 @@ MonoBehaviour:
   - {fileID: 1372859159}
   - {fileID: 661411992}
   - {fileID: 1627430859}
-  moveCardSprite: {fileID: 21300000, guid: a65a6767ff67c0b45b11d46242276596, type: 3}
-  JumpCardSprite: {fileID: 21300000, guid: 82993f725252748459b0d98306e8c49c, type: 3}
-  TurnRightCardSprite: {fileID: 21300000, guid: 1f27858445521774a879a82847fbe6fd, type: 3}
-  TurnLeftCardSprite: {fileID: 21300000, guid: 58d956ffa748b154b8e9225ed062a4ac, type: 3}
-  BackToItCardSprite: {fileID: 21300000, guid: 48c9a2b8d8696da44bd01e3110c74740, type: 3}
-  SwitchCardSprite: {fileID: 21300000, guid: 66c05220ac471e24a8235acc67e3340b, type: 3}
-  ClearCardSprite: {fileID: 21300000, guid: 3e2305d8e3c0ae6409e44137a35c2d7d, type: 3}
+  moveCardSprite: {fileID: 21300000, guid: 518bae488329eb349b85ea6de116337e, type: 3}
+  JumpCardSprite: {fileID: 21300000, guid: 2d023cd4e6ebe6b4891e14ec066136bb, type: 3}
+  TurnRightCardSprite: {fileID: 21300000, guid: 67a2ea96ff5739946b4a9522eb75fdaa, type: 3}
+  TurnLeftCardSprite: {fileID: 21300000, guid: 060b9c1558af5e445a3d8578789bd7fd, type: 3}
+  BackToItCardSprite: {fileID: 21300000, guid: 184e4e1ee496b6249b49a00c52bbc447, type: 3}
+  SwitchCardSprite: {fileID: 21300000, guid: 41e05aff63bc2ba4a8532837a874dbbd, type: 3}
+  ClearCardSprite: {fileID: 21300000, guid: cebf136a275e6684ebc1fdc3c18720dd, type: 3}
   deckManager: {fileID: 175265908}
   returnButton: {fileID: 120503336}
   readyText: {fileID: 864163338}
