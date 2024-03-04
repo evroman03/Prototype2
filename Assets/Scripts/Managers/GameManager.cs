@@ -261,7 +261,6 @@ public class GameManager : MonoBehaviour
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Clear Card")
         {
             deckManager.RemoveLastPlayed();
-            print("CEARED ACTION");
             if (deckManager.GetPlayedCards().Count > 0)
                 ClearAction();
             else
@@ -274,7 +273,6 @@ public class GameManager : MonoBehaviour
         if (playedCards.Count > 0 && playedCards[playedCards.Count - 1].name == "Switch Card")
         {
             deckManager.RemoveLastPlayed();
-            print("SWITCH ACTION");
             if (deckManager.GetPlayedCards().Count > 1)
                 SwitchAction();
             else
@@ -315,7 +313,6 @@ public class GameManager : MonoBehaviour
                 print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
                 break;
         }
-        print("PLAYED");
         tempPlayedCards.RemoveAt(0);
     }
 
@@ -368,14 +365,12 @@ public class GameManager : MonoBehaviour
             //Ignores previous Back To It Cards
             if (playedCards[i].name != "Back To It Card")
             {
-                print("FOUND BEFORE " + playedCards[i]);
                 tempBeforeBackToItCards.Add(playedCards[i]);
             }
         }
         //Copies all cards after BackToIt Card
         for (int i = lastBackToItIndex + 1; i < playedCardsSize; i++)
         {
-            print("FOUND AFTER " + playedCards[i]);
             tempAfterBackToItCards.Add(playedCards[i]);
         }
 
@@ -387,10 +382,8 @@ public class GameManager : MonoBehaviour
 
         //Adds all cards before Back To It into the list
         int beforeBackToItSize = tempBeforeBackToItCards.Count;
-        print("Size = " + beforeBackToItSize);
         for (int i = 0; i < beforeBackToItSize; i++)
         {
-            print("CARD ADDED " + tempBeforeBackToItCards[i]);
             tempPlayedCards.Add(tempBeforeBackToItCards[i]);
         }
 
