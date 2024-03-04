@@ -249,7 +249,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Falling")
         {
-            switch (facingBlock.Type.ToString())
+            print("CHECKINGFALLING");
+            //switch (facingBlock.Type.ToString())
+            switch(thisSquare)
             {
                 case "Ground":
                     if(transform.parent.position.y > 1.7f)
@@ -325,7 +327,7 @@ public class PlayerController : MonoBehaviour
     {
         //UpdatePos();
         //transform.parent.position = gameObject.transform.position;
-        transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x),(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        transform.parent.position = new Vector3(Mathf.RoundToInt(gameObject.transform.position.x), (float)Math.Round(gameObject.transform.position.y, 2), Mathf.RoundToInt(gameObject.transform.position.z));
         //transform.parent.position = new Vector3(facingBlock.location.x, /*facingBlock.location.y+facingBlock.height,*/transform.position.y, facingBlock.location.z);
         Action("Falling");
     }
@@ -336,6 +338,19 @@ public class PlayerController : MonoBehaviour
     }
     void UpdateRot()
     {
-        transform.parent.rotation= gameObject.transform.rotation;  
+        //transform.parent.rotation= gameObject.transform.rotation;  
+        Quaternion rotation = gameObject.transform.rotation;
+        Vector3 eulerAngles = rotation.eulerAngles;
+
+        // Round each Euler angle to the nearest whole number
+        int roundedX = Mathf.RoundToInt(eulerAngles.x);
+        int roundedY = Mathf.RoundToInt(eulerAngles.y);
+        int roundedZ = Mathf.RoundToInt(eulerAngles.z);
+
+        // Create a new rotation quaternion using the rounded Euler angles
+        Quaternion roundedRotation = Quaternion.Euler(roundedX, roundedY, roundedZ);
+
+        // Apply the rounded rotation to the parent transform
+        transform.parent.rotation = roundedRotation;
     }
 }
