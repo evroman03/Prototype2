@@ -205,27 +205,6 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
-            //Checks if the stored card was clicked
-            if (cardClicked == -1)
-            {
-                if (storedCardData != null)
-                    storedCardData.SetClicked(true);
-                return;
-            }
-            else if (storedCardData != null)
-                storedCardData.SetClicked(false);
-
-            int dealtCardsCount = dealtCards.Count;
-
-            //Sets all cards to not clicked
-            for (int i = 0; i < dealtCardsCount; i++)
-            {
-                dealtCards[i].SetClicked(false);
-            }
-
-            //Sets the card that was clicked to clicked
-            dealtCards[cardClicked - 1].SetClicked(true);
-
             switch (cardClicked)
             {
                 case -1:
@@ -264,6 +243,27 @@ public class UIManager : MonoBehaviour
                     storedCardHighlight.enabled = false;
                     break;
             }
+
+            //Checks if the stored card was clicked
+            if (cardClicked == -1)
+            {
+                if (storedCardData != null)
+                    storedCardData.SetClicked(true);
+                return;
+            }
+            else if (storedCardData != null)
+                storedCardData.SetClicked(false);
+
+            int dealtCardsCount = dealtCards.Count;
+
+            //Sets all cards to not clicked
+            for (int i = 0; i < dealtCardsCount; i++)
+            {
+                dealtCards[i].SetClicked(false);
+            }
+
+            //Sets the card that was clicked to clicked
+            dealtCards[cardClicked - 1].SetClicked(true);
         }
     }
 
