@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Canvas gameUI, playedCardsUI;
     [SerializeField] private int maxNumOfCardsPlayed = 12;
     [SerializeField] private Image dealtCard1, dealtCard2, dealtCard3, dealtCard4, storedCard;
+    [SerializeField] private Image highlight1, highlight2, highlight3, highlight4, storedCardHighlight;
     [SerializeField] private Image[] playedCards;
     [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
@@ -58,6 +59,12 @@ public class UIManager : MonoBehaviour
             playedCards[i].enabled = false;
         }
         returnButton.gameObject.SetActive(false);
+
+        highlight1.enabled = false;
+        highlight2.enabled = false;
+        highlight3.enabled = false;
+        highlight4.enabled = false;
+        storedCardHighlight.enabled = false;
     }
 
     /**
@@ -110,6 +117,13 @@ public class UIManager : MonoBehaviour
      */
     public void PlayCard()
     {
+        //Switches all highlights to off
+        highlight1.enabled = false;
+        highlight2.enabled = false;
+        highlight3.enabled = false;
+        highlight4.enabled = false;
+        storedCardHighlight.enabled = false;
+
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
             if (storedCardData != null && storedCardData.GetClicked() && deckManager.GetStoredCardWait() < 1)
@@ -145,6 +159,13 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            //Switches all highlights to off
+            highlight1.enabled = false;
+            highlight2.enabled = false;
+            highlight3.enabled = false;
+            highlight4.enabled = false;
+            storedCardHighlight.enabled = false;
+
             int dealtCardsCount = dealtCards.Count;
             for (int i = 0; i < dealtCardsCount; i++)
             {
@@ -165,6 +186,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShuffleClicked()
+    {
+        //Turns all highlights off
+        highlight1.enabled = false;
+        highlight2.enabled = false;
+        highlight3.enabled = false;
+        highlight4.enabled = false;
+        storedCardHighlight.enabled = false;
+
+        gameManager.ShuffleDeck();
+    }
+
     /**
      * If the Card is clicked, automatically calls this method.
      */
@@ -172,6 +205,45 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            switch (cardClicked)
+            {
+                case -1:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = true;
+                    break;
+                case 1:
+                    highlight1.enabled = true;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                case 2:
+                    highlight1.enabled = false;
+                    highlight2.enabled = true;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                case 3:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = true;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                case 4:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = true;
+                    storedCardHighlight.enabled = false;
+                    break;
+            }
+
             //Checks if the stored card was clicked
             if (cardClicked == -1)
             {
