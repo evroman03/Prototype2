@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
             gM.PlaySequence();
         }    
     }
-    bool CurrentBlock(BlockID block)
+    bool CurrentBlock(BlockID block) 
     {
         // Check if player's position is close enough to block's position
         Vector3 blockPos = block.location;
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
         return isTrue;
     }
-    public void Action(string actionName)
+    public void Action(string actionName) 
     {
         string thisSquare = "";
         string nextSquare = "";
@@ -156,7 +156,8 @@ public class PlayerController : MonoBehaviour
                     switch (nextSquare)
                     {
                         case "Ground":
-                            _animator.SetTrigger("Jump");
+                            //_animator.SetTrigger("Jump");
+                            _animator.SetTrigger("JumpAcross");
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
@@ -165,7 +166,8 @@ public class PlayerController : MonoBehaviour
                             _animator.SetTrigger("FailJump");
                             break;
                         default:
-                            _animator.SetTrigger("JumpDown");
+                            //_animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpAcross");
                             break;
                     }
                     break;
@@ -173,7 +175,7 @@ public class PlayerController : MonoBehaviour
                     switch (nextSquare)
                     {
                         case "Ground":
-                            _animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpDown2");
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
@@ -193,7 +195,7 @@ public class PlayerController : MonoBehaviour
                             _animator.SetTrigger("Jump");
                             break;
                         default:
-                            _animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpDown2");
                             break;
                     }
                     break;
