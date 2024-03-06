@@ -33,7 +33,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] Transform cardFolder, playedCardsFolder;
 
     private Card spawnCard = null;
-    public List<Card> deck, dealtCards, playedCards;
+    private List<Card> deck, dealtCards, playedCards;
 
     [SerializeField] Card storedCard;
     private int storedCardWait;
