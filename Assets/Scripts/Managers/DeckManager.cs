@@ -30,10 +30,10 @@ public class DeckManager : MonoBehaviour
                        numBackToItCards, numSwitchCards, numClearCards;
     private int totalCards;
     [SerializeField] Card card;
-    [SerializeField] Transform cardFolder;
+    [SerializeField] Transform cardFolder, playedCardsFolder;
 
     private Card spawnCard = null;
-    public List<Card> deck, dealtCards, playedCards;
+    private List<Card> deck, dealtCards, playedCards;
 
     [SerializeField] Card storedCard;
     private int storedCardWait;
@@ -343,7 +343,11 @@ public class DeckManager : MonoBehaviour
         if (cardPlacementNumIndex == -1)
         {
             storedCard.SetClicked(false);
+            
+            
             playedCards.Add(storedCard);
+            
+            
             storedCard = null;
             uiManager.UpdatePlayedCardsImage();
             return;
@@ -351,7 +355,23 @@ public class DeckManager : MonoBehaviour
 
         //If any other dealt card was clicked
         dealtCards[cardPlacementNumIndex].SetClicked(false);
-        playedCards.Add(dealtCards[cardPlacementNumIndex]);
+        
+        //Creates a new card to go into the playedCards deck
+
+        //Instaniates played card
+        spawnCard = Instantiate(card);
+
+        //Puts card inside the card folder for organization
+        spawnCard.gameObject.transform.SetParent(playedCardsFolder);
+
+        //Changes attributes of the card
+        spawnCard.name = dealtCards[cardPlacementNumIndex].name;
+        spawnCard.SetClicked(false);
+
+        //Adds card into the deck
+        playedCards.Add(spawnCard);
+
+        //playedCards.Add(dealtCards[cardPlacementNumIndex]);
         uiManager.UpdatePlayedCardsImage();
     }
 
