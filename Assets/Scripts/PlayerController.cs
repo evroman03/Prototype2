@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 60;
         BlockID[] allBlocks = FindObjectsOfType<BlockID>();
         blockIDs = new List<BlockID>(allBlocks);
         if (_animator == null)
@@ -253,7 +254,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Falling")
         {
-            print("CHECKINGFALLING");
             //switch (facingBlock.Type.ToString())
             switch(thisSquare)
             {
