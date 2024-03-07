@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] playedCards;
     [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
+    [SerializeField] private TextMeshProUGUI firstCardText;
     [SerializeField] DeckManager deckManager;
     [SerializeField] private Button returnButton;
     [SerializeField] private TextMeshProUGUI readyText;
@@ -60,6 +61,7 @@ public class UIManager : MonoBehaviour
         }
         returnButton.gameObject.SetActive(false);
 
+        firstCardText.enabled = false;
         highlight1.enabled = false;
         highlight2.enabled = false;
         highlight3.enabled = false;
@@ -373,11 +375,21 @@ public class UIManager : MonoBehaviour
         {
             if (playedCardsData[i] != null)
             {
+                //enables the card template sprite
                 playedCards[i].enabled = true;
                 UpdateImageSprite(playedCards[i], i, false);
+
+                //enables the text
+                firstCardText.enabled = true;
             }
             else
+            {
+                //Disables the card template sprite
                 playedCards[i].enabled = false;
+
+                //disables the text
+                firstCardText.enabled = false;
+            }
         }
 
         //Disables all other card images
