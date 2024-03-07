@@ -305,30 +305,12 @@ public class PlayerController : MonoBehaviour
                     nextSquare = "Ground";
                 }
             }
+            if(!FacingBlock(block))
+            {
+                print("HERE");
+            }
         }
     }
-
-    /*
-    private string CheckSquareType(Vector3 offset)
-    {
-        RaycastHit hit;
-        Vector3 parentScan = transform.parent.position + offset;
-
-        if (Physics.Raycast(parentScan, -transform.parent.up, out hit, 3f))
-        {
-            return hit.collider.tag.ToString();
-        }
-        return "";
-    }
-    
-    void Jump(InputAction.CallbackContext ctx)
-    {
-        _animator.SetTrigger("Jump");
-    }
-    void JumpCanceled(InputAction.CallbackContext ctx)
-    {
-        _animator.ResetTrigger("Jump");
-    }*/
     void CheckFalling()
     {
         //UpdatePos();
@@ -336,11 +318,6 @@ public class PlayerController : MonoBehaviour
         transform.parent.position = new Vector3(Mathf.RoundToInt(gameObject.transform.position.x), (float)Math.Round(gameObject.transform.position.y, 2), Mathf.RoundToInt(gameObject.transform.position.z));
         //transform.parent.position = new Vector3(facingBlock.location.x, /*facingBlock.location.y+facingBlock.height,*/transform.position.y, facingBlock.location.z);
         Action("Falling");
-    }
-    void UpdatePos()
-    {
-        transform.parent.position = gameObject.transform.position;
-        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
     }
     void UpdateRot()
     {
