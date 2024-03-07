@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerEndTrigger endTrigger;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
-    [SerializeField] private bool runFrontToBack = true;
     [SerializeField] private int cardsToDeal = 4;
     [SerializeField] private int numOfShuffles = 3;
 
@@ -253,18 +252,9 @@ public class GameManager : MonoBehaviour
         int playedCardsCount = playedCards.Count;
 
         //Adds copies of the cards into a temporary list
-        if (runFrontToBack)
+        for (int i = 0; i < playedCardsCount; i++)
         {
-            for (int i = 0; i < playedCardsCount; i++)
-            {
-                tempPlayedCards.Add(playedCards[i]);
-            }
-        } else
-        {
-            for (int i = playedCardsCount - 1; i > -1; i--)
-            {
-                tempPlayedCards.Add(playedCards[i]);
-            }
+            tempPlayedCards.Add(playedCards[i]);
         }
 
         //If Clear Card was Played

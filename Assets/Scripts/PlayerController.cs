@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
             gM.PlaySequence();
         }    
     }
-    bool CurrentBlock(BlockID block)
+    bool CurrentBlock(BlockID block) 
     {
         // Check if player's position is close enough to block's position
         Vector3 blockPos = block.location;
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
         return isTrue;
     }
-    public void Action(string actionName)
+    public void Action(string actionName) 
     {
         string thisSquare = "";
         string nextSquare = "";
@@ -156,7 +156,8 @@ public class PlayerController : MonoBehaviour
                     switch (nextSquare)
                     {
                         case "Ground":
-                            _animator.SetTrigger("Jump");
+                            //_animator.SetTrigger("Jump");
+                            _animator.SetTrigger("JumpAcross");
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
@@ -165,7 +166,8 @@ public class PlayerController : MonoBehaviour
                             _animator.SetTrigger("FailJump");
                             break;
                         default:
-                            _animator.SetTrigger("JumpDown");
+                            //_animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpAcross");
                             break;
                     }
                     break;
@@ -173,7 +175,7 @@ public class PlayerController : MonoBehaviour
                     switch (nextSquare)
                     {
                         case "Ground":
-                            _animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpDown2");
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
@@ -193,7 +195,7 @@ public class PlayerController : MonoBehaviour
                             _animator.SetTrigger("Jump");
                             break;
                         default:
-                            _animator.SetTrigger("JumpDown");
+                            _animator.SetTrigger("JumpDown2");
                             break;
                     }
                     break;
@@ -303,30 +305,12 @@ public class PlayerController : MonoBehaviour
                     nextSquare = "Ground";
                 }
             }
+            if(!FacingBlock(block))
+            {
+                print("HERE");
+            }
         }
     }
-
-    /*
-    private string CheckSquareType(Vector3 offset)
-    {
-        RaycastHit hit;
-        Vector3 parentScan = transform.parent.position + offset;
-
-        if (Physics.Raycast(parentScan, -transform.parent.up, out hit, 3f))
-        {
-            return hit.collider.tag.ToString();
-        }
-        return "";
-    }
-    
-    void Jump(InputAction.CallbackContext ctx)
-    {
-        _animator.SetTrigger("Jump");
-    }
-    void JumpCanceled(InputAction.CallbackContext ctx)
-    {
-        _animator.ResetTrigger("Jump");
-    }*/
     void CheckFalling()
     {
         //UpdatePos();
@@ -334,11 +318,6 @@ public class PlayerController : MonoBehaviour
         transform.parent.position = new Vector3(Mathf.RoundToInt(gameObject.transform.position.x), (float)Math.Round(gameObject.transform.position.y, 2), Mathf.RoundToInt(gameObject.transform.position.z));
         //transform.parent.position = new Vector3(facingBlock.location.x, /*facingBlock.location.y+facingBlock.height,*/transform.position.y, facingBlock.location.z);
         Action("Falling");
-    }
-    void UpdatePos()
-    {
-        transform.parent.position = gameObject.transform.position;
-        //transform.parent.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
     }
     void UpdateRot()
     {
