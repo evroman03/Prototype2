@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17316318, g: 0.16457182, b: 0.29665613, a: 1}
+  m_IndirectSpecularColor: {r: 0.17323539, g: 0.16459554, b: 0.2966911, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3690,7 +3690,7 @@ MonoBehaviour:
   endTrigger: {fileID: 885695735}
   player: {fileID: 1507224370}
   playerStartingLocation: {x: -1, y: 0.75, z: 0}
-  runFrontToBack: 0
+  runFrontToBack: 1
   cardsToDeal: 4
   numOfShuffles: 99
   removeFirst: {fileID: 1530678337}
