@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public STATE gameState;
     [SerializeField] private DeckManager deckManager;
     [SerializeField] private UIManager uiManager;
+    [SerializeField] private CardManager cardManager;
     [SerializeField] private PlayerEndTrigger endTrigger;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
@@ -115,6 +116,7 @@ public class GameManager : MonoBehaviour
         //Inits all other Managers
         deckManager.InitDeckManager();
         uiManager.InitUIManager();
+        cardManager.InitCardManager();
         deckManager.BuildDeck();
         endTrigger.InitTrigger();
         player.transform.position = playerStartingLocation;
