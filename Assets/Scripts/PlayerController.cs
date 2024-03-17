@@ -305,10 +305,6 @@ public class PlayerController : MonoBehaviour
                     nextSquare = "Ground";
                 }
             }
-            if(!FacingBlock(block))
-            {
-                print("HERE");
-            }
         }
     }
     void CheckFalling()
