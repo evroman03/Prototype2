@@ -14,14 +14,30 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-    public void HowToPlay()
+    //Level Select
+    public void PlayLevel1()
     {
         SceneManager.LoadScene(2);
     }
-    public void Credits()
+    public void PlayLevel2()
     {
         SceneManager.LoadScene(3);
     }
+    public void PlayLevel3()
+    {
+        SceneManager.LoadScene(4);
+    }
+    //Menu
+    public void HowToPlay()
+    {
+        SceneManager.LoadScene(5);
+    }
+    public void Credits()
+    {
+        SceneManager.LoadScene(6);
+    }
+    
+    
     public void Quit()
     {
         print("Let Me Out");
