@@ -1,3 +1,7 @@
+/*
+ * Manages the game state, card actions, and all other managers 
+ */
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,7 +35,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerEndTrigger endTrigger;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 playerStartingLocation;
-    [SerializeField] private bool runFrontToBack = true;
     [SerializeField] private int cardsToDeal = 4;
     [SerializeField] private int numOfShuffles = 3;
 
@@ -65,35 +68,24 @@ public class GameManager : MonoBehaviour
      */
     public void Reset()
     {
-        /*
-        //Resets the decks
-        deckManager.BuildDeck();
-        deckManager.ClearDealtCards();
-        deckManager.ClearPlayedCards();
-        deckManager.SetStoredCard(null);
-
-        //Resets player position
-        player.transform.position = playerStartingLocation;
-        player.transform.rotation = Quaternion.identity;
-        player.transform.rotation *= Quaternion.Euler(0, 0, 0);
-
-        //Resets Game State
-        ChangeGameState(STATE.ChooseCards);
-        */
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
     }
 
-    //Changes the game state and activates methods if needed
+    /**
+     * Changes the gamestate
+     */
     public void ChangeGameState(STATE state)
     {
+        //Checks for what state to change to
         switch (state)
         {
             case STATE.Menu:
+                //Menu methods called
                 gameState = STATE.Menu;
                 StartGame();
                 break;
             case STATE.ChooseCards:
+                //Choose Cards methods called
                 gameState = STATE.ChooseCards;
                 DealCards();
                 break;
@@ -120,6 +112,7 @@ public class GameManager : MonoBehaviour
     //Calls "Start" Functions for other Managers
     private void StartGame()
     {
+        //Inits all other Managers
         deckManager.InitDeckManager();
         uiManager.InitUIManager();
         deckManager.BuildDeck();
@@ -127,10 +120,17 @@ public class GameManager : MonoBehaviour
         player.transform.position = playerStartingLocation;
     }
 
+    /**
+     * Returns all dealt cards back into the deck and reshuffles them
+     * Deals up to four cards
+     * If there are less than four cards in the deck, deals all the remaining cards
+     */
     private void DealCards()
     {
         //If there are no cards played
         if (playedCards.Count < 1) {
+            //If the dealt hand is a valid hand
+            //Does not allow cards that would be useless to be dealt
             bool isValid = false;
             //Make sure dealt cards do not include Switch or Clear cards
             while (!isValid)
@@ -168,7 +168,8 @@ public class GameManager : MonoBehaviour
             uiManager.UpdateDealtCardsImages();
 
             playedCards = deckManager.GetPlayedCards();
-
+            
+        //If the player only has one card in their played cards deck
         } else if (playedCards.Count == 1) {
             bool isValid = false;
             //Make sure dealt cards do not include the Switch Card
@@ -227,6 +228,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /**
+     * Called when the shuffle button is clicked
+     */
     public void ShuffleDeck()
     {
         if (numOfShuffles > 0)
@@ -239,6 +243,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /**
+     * Goes through the played cards and prepares to play the sequence.
+     * Checks and does functions for cards that do not get added into the play sequence (ex: Clear Card or Switch Card)
+     */
     private void RunPlaySequence()
     {
         deckManager.ReturnDealtCards();
@@ -253,18 +261,9 @@ public class GameManager : MonoBehaviour
         int playedCardsCount = playedCards.Count;
 
         //Adds copies of the cards into a temporary list
-        if (runFrontToBack)
+        for (int i = 0; i < playedCardsCount; i++)
         {
-            for (int i = 0; i < playedCardsCount; i++)
-            {
-                tempPlayedCards.Add(playedCards[i]);
-            }
-        } else
-        {
-            for (int i = playedCardsCount - 1; i > -1; i--)
-            {
-                tempPlayedCards.Add(playedCards[i]);
-            }
+            tempPlayedCards.Add(playedCards[i]);
         }
 
         //If Clear Card was Played
@@ -291,12 +290,20 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
+
+    /**
+     * Checks the sequence and calls the animation based off the card
+     * Called after the player chooses a card and when the player returns to the idle animation
+     */
     public void PlaySequence()
     {
+        //If there is nothing in the played deck, play sequence is over and allow the player to pick another card
         if(tempPlayedCards.Count < 1) {
             ChangeGameState(STATE.ChooseCards);
             return;
         }
+
+        //Checks the first card in the played cards List and gets its data
         switch (tempPlayedCards[0].name)
         {
             case "Move Card":
@@ -323,6 +330,7 @@ public class GameManager : MonoBehaviour
                 print("ERROR: ATTEMPTED TO DO INVALID ACTION FROM INVALID CARD NAME");
                 break;
         }
+        //Removes the first card in the action order.
         tempPlayedCards.RemoveAt(0);
     }
 

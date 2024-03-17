@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuController : MonoBehaviour
+public class SceneController : MonoBehaviour
 {
     // Start is called before the first frame update
     public void Menu()
@@ -14,14 +14,30 @@ public class MainMenuController : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-    public void HowToPlay()
+    //Level Select
+    public void PlayLevel1()
     {
         SceneManager.LoadScene(2);
     }
-    public void Credits()
+    public void PlayLevel2()
     {
         SceneManager.LoadScene(3);
     }
+    public void PlayLevel3()
+    {
+        SceneManager.LoadScene(4);
+    }
+    //Menu
+    public void HowToPlay()
+    {
+        SceneManager.LoadScene(5);
+    }
+    public void Credits()
+    {
+        SceneManager.LoadScene(6);
+    }
+    
+    
     public void Quit()
     {
         print("Let Me Out");

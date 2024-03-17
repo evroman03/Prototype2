@@ -1,3 +1,7 @@
+/*
+ * Controls the UI components
+ */
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -32,6 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] playedCards;
     [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
                                     BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
+    [SerializeField] private TextMeshProUGUI firstCardText;
     [SerializeField] DeckManager deckManager;
     [SerializeField] private Button returnButton;
     [SerializeField] private TextMeshProUGUI readyText;
@@ -44,7 +49,7 @@ public class UIManager : MonoBehaviour
 
 
     /**
-     * Initializes variables for UIManager
+     * Initializes variables for UIManager. Called by GameManager
      */
     public void InitUIManager()
     {
@@ -60,6 +65,7 @@ public class UIManager : MonoBehaviour
         }
         returnButton.gameObject.SetActive(false);
 
+        firstCardText.enabled = false;
         highlight1.enabled = false;
         highlight2.enabled = false;
         highlight3.enabled = false;
@@ -124,8 +130,11 @@ public class UIManager : MonoBehaviour
         highlight4.enabled = false;
         storedCardHighlight.enabled = false;
 
+        //If the game state is in Choose Cards state
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            //Checks if the stored card was clicked
+            //Short circuits if there is no data stored card so no errors are caused
             if (storedCardData != null && storedCardData.GetClicked() && deckManager.GetStoredCardWait() < 1)
             {
                 deckManager.PlayDealtCard(-1);
@@ -136,14 +145,17 @@ public class UIManager : MonoBehaviour
                 return;
             }
 
+            //Checks for a card that was clicked
             int dealtCardsCount = dealtCards.Count;
             for (int i = 0; i < dealtCardsCount; i++)
             {
                 if (dealtCards[i].GetClicked())
                 {
+                    //Adds the played card into the played cards list
                     deckManager.PlayDealtCard(i);
                     dealtCardsCount--;
 
+                    //Updates game
                     CheckDealtCards();
                     gameManager.ChangeGameState(GameManager.STATE.Lv1);
                     return;
@@ -167,6 +179,8 @@ public class UIManager : MonoBehaviour
             storedCardHighlight.enabled = false;
 
             int dealtCardsCount = dealtCards.Count;
+
+            //Finds the card that was clicked
             for (int i = 0; i < dealtCardsCount; i++)
             {
                 if (dealtCards[i].GetClicked())
@@ -174,8 +188,11 @@ public class UIManager : MonoBehaviour
                     //Checks to see if the stored card is not the same as the one attempting to be stored
                     if (storedCardData == null || deckManager.GetStoredCardWait() < 1)
                     {
+                        //Stores the selected card
                         deckManager.SetStoredCard(dealtCards[i]);
                         dealtCardsCount--;
+
+                        //Updates the game
                         CheckDealtCards();
                         UpdateReadyText();
                         UpdateDealtCardsImages();
@@ -186,6 +203,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /**
+     * Called when the shuffle button is clicked
+     */
     public void ShuffleClicked()
     {
         //Turns all highlights off
@@ -203,8 +223,53 @@ public class UIManager : MonoBehaviour
      */
     public void DealtCardClicked(int cardClicked)
     {
+        //If the game state is in Choose Cards
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            switch (cardClicked)
+            {
+                //If the stored card was clicked
+                case -1:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = true;
+                    break;
+                //If the first card dealt was clicked
+                case 1:
+                    highlight1.enabled = true;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                //If the second card dealt was clicked
+                case 2:
+                    highlight1.enabled = false;
+                    highlight2.enabled = true;
+                    highlight3.enabled = false;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                //If the third card dealt was clicked
+                case 3:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = true;
+                    highlight4.enabled = false;
+                    storedCardHighlight.enabled = false;
+                    break;
+                //If the fourth card dealt was clicked
+                case 4:
+                    highlight1.enabled = false;
+                    highlight2.enabled = false;
+                    highlight3.enabled = false;
+                    highlight4.enabled = true;
+                    storedCardHighlight.enabled = false;
+                    break;
+            }
+
             //Checks if the stored card was clicked
             if (cardClicked == -1)
             {
@@ -225,45 +290,6 @@ public class UIManager : MonoBehaviour
 
             //Sets the card that was clicked to clicked
             dealtCards[cardClicked - 1].SetClicked(true);
-
-            switch (cardClicked)
-            {
-                case -1:
-                    highlight1.enabled = false;
-                    highlight2.enabled = false;
-                    highlight3.enabled = false;
-                    highlight4.enabled = false;
-                    storedCardHighlight.enabled = true;
-                    break;
-                case 1:
-                    highlight1.enabled = true;
-                    highlight2.enabled = false;
-                    highlight3.enabled = false;
-                    highlight4.enabled = false;
-                    storedCardHighlight.enabled = false;
-                    break;
-                case 2:
-                    highlight1.enabled = false;
-                    highlight2.enabled = true;
-                    highlight3.enabled = false;
-                    highlight4.enabled = false;
-                    storedCardHighlight.enabled = false;
-                    break;
-                case 3:
-                    highlight1.enabled = false;
-                    highlight2.enabled = false;
-                    highlight3.enabled = true;
-                    highlight4.enabled = false;
-                    storedCardHighlight.enabled = false;
-                    break;
-                case 4:
-                    highlight1.enabled = false;
-                    highlight2.enabled = false;
-                    highlight3.enabled = false;
-                    highlight4.enabled = true;
-                    storedCardHighlight.enabled = false;
-                    break;
-            }
         }
     }
 
@@ -285,6 +311,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /**
+     * Updates the local list of dealt cards
+     */
     public void UpdateDealtCards()
     {
         dealtCards = deckManager.GetDealtCards();
@@ -373,11 +402,21 @@ public class UIManager : MonoBehaviour
         {
             if (playedCardsData[i] != null)
             {
+                //enables the card template sprite
                 playedCards[i].enabled = true;
                 UpdateImageSprite(playedCards[i], i, false);
+
+                //enables the text
+                firstCardText.enabled = true;
             }
             else
+            {
+                //Disables the card template sprite
                 playedCards[i].enabled = false;
+
+                //disables the text
+                firstCardText.enabled = false;
+            }
         }
 
         //Disables all other card images
