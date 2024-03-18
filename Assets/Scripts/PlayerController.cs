@@ -158,6 +158,7 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailJump");
+                            SoundManager.Instance.HitWall();
                             break;
                         default:
                             //_animator.SetTrigger("JumpDown");
@@ -208,7 +209,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (actionName == "Move Card")
         {
-            //POYOprint("HERE");
             switch (thisSquare)
             {
                 case "Ground":
@@ -220,11 +220,11 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("FailMove");
-                            
+                            SoundManager.Instance.HitWall();
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
-                            
+                            SoundManager.Instance.HitWall();
                             break;
                         default:
                             _animator.SetTrigger("Move");
@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
-                            
+                            SoundManager.Instance.HitWall();
                             break;
                         default:
                             _animator.SetTrigger("Move");
