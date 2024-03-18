@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c99b28ff13f6d204ba09ae1c42008fb4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9e11a72202e13a14d926c0f31aa4582e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1521,7 +1521,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0983581b0e2539f4484591b96a8a83ca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6f56a38aae8f5674ebfe590ea7e72e16, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1866,8 +1866,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Use the Left Mouse Button to select your card, and click Play to play
-    the selected card
+  m_text: 'Use the Left Mouse Button to click and drag a card to the center of the
+    screen to play it
 
 
     Each card you choose goes into an order that repeats
@@ -2016,10 +2016,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "You can click Store while having a card selected to store a card to use
-    at a later point in the level.\n\nYou win the game by landing on the goal space,
-    and lose the \ngame by falling off the map or into a pit\n\n\n\n\n\n\n\nUse the
-    arrow keys to rotate the camera's position"
+  m_text: "You can drag and drop a card onto the storage area to store a card to
+    play later in the level\n\nYou win the game by landing on the goal space, and
+    lose the \ngame by falling off the map or into a pit\n\n\n\n\n\n\n\nUse the arrow
+    keys to rotate the camera's position"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
