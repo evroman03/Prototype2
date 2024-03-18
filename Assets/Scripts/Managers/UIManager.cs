@@ -34,8 +34,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image dealtCard1, dealtCard2, dealtCard3, dealtCard4, storedCard;
     [SerializeField] private Image highlight1, highlight2, highlight3, highlight4, storedCardHighlight;
     [SerializeField] private Image[] playedCards;
-    [SerializeField] private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite,TurnLeftCardSprite,
-                                    BackToItCardSprite, SwitchCardSprite, ClearCardSprite;
+    [SerializeField]
+    private Sprite moveCardSprite, JumpCardSprite, TurnRightCardSprite, TurnLeftCardSprite,
+                                    BackToItCardSprite, SwitchCardSprite, ClearCardSprite, storeCardAreaSprite;
     [SerializeField] private TextMeshProUGUI firstCardText;
     [SerializeField] DeckManager deckManager;
     [SerializeField] private Button returnButton;
@@ -71,6 +72,8 @@ public class UIManager : MonoBehaviour
         highlight3.enabled = false;
         highlight4.enabled = false;
         storedCardHighlight.enabled = false;
+
+        storedCard.sprite = storeCardAreaSprite;
     }
 
     /**
@@ -108,12 +111,11 @@ public class UIManager : MonoBehaviour
         //If there is a stored card, show the stored card
         if (storedCardData != null)
         {
-            storedCard.enabled = true;
             readyText.enabled = true;
         }
         else
         {
-            storedCard.enabled = false;
+            storedCard.sprite = storeCardAreaSprite;
             readyText.enabled = false;
         }
     }
@@ -138,6 +140,7 @@ public class UIManager : MonoBehaviour
             if (storedCardData != null && storedCardData.GetClicked() && deckManager.GetStoredCardWait() < 1)
             {
                 deckManager.PlayDealtCard(-1);
+                deckManager.UpdateStoredCardWait();
 
                 CheckDealtCards();
 
@@ -153,6 +156,7 @@ public class UIManager : MonoBehaviour
                 {
                     //Adds the played card into the played cards list
                     deckManager.PlayDealtCard(i);
+                    deckManager.UpdateStoredCardWait();
                     dealtCardsCount--;
 
                     //Updates game
@@ -171,6 +175,7 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            SoundManager.Instance.StoringCard();
             //Switches all highlights to off
             highlight1.enabled = false;
             highlight2.enabled = false;
@@ -208,6 +213,7 @@ public class UIManager : MonoBehaviour
      */
     public void ShuffleClicked()
     {
+        SoundManager.Instance.ShuffleCards();
         //Turns all highlights off
         highlight1.enabled = false;
         highlight2.enabled = false;
@@ -226,6 +232,7 @@ public class UIManager : MonoBehaviour
         //If the game state is in Choose Cards
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            SoundManager.Instance.SelectedCard();
             switch (cardClicked)
             {
                 //If the stored card was clicked
@@ -234,7 +241,8 @@ public class UIManager : MonoBehaviour
                     highlight2.enabled = false;
                     highlight3.enabled = false;
                     highlight4.enabled = false;
-                    storedCardHighlight.enabled = true;
+                    if (storedCardData != null)
+                        storedCardHighlight.enabled = true;
                     break;
                 //If the first card dealt was clicked
                 case 1:

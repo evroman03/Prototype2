@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2438550488401497465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1295525951053407123}
+  - component: {fileID: 1683836183572466305}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1295525951053407123
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438550488401497465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 565.9584, y: 359.1408, z: -171.99084}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1683836183572466305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438550488401497465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8a980d2f32b354e9a998df5268f218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardShuffle: {fileID: 8300000, guid: 35e818ccba03d3e49a5500306da6434d, type: 3}
+  LevelComplete: {fileID: 8300000, guid: a5ccfd2331301e84fafcde6a7160f531, type: 3}
+  PlayerJump: {fileID: 8300000, guid: c5f86a600e2b74c4993ae13d5720cd5f, type: 3}
+  PlayerTurning: {fileID: 8300000, guid: 3278c3ccaaf822b4cb8c08d6c8562b67, type: 3}
+  SelectCard: {fileID: 8300000, guid: b2a7c681288583443a8289ec586276b4, type: 3}
+  StoreCard: {fileID: 8300000, guid: 9ba8dd9712f0ed84ba52d173d7ca4878, type: 3}
+  PlayerFalling: {fileID: 8300000, guid: d2e1a456a9b87454e81bc1bfc5c7bbf6, type: 3}
+  PlayerMoving: {fileID: 8300000, guid: 905b184c85d0fd140994f08ebc296976, type: 3}
+  WallCollision: {fileID: 8300000, guid: 8f08061caadb033439363cba9c7ec671, type: 3}
+  audioLocation: {fileID: 0}
