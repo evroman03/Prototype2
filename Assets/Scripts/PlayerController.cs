@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
                 }
                 if(thisSquare == "FinishBlock")
                 {
-                    SceneManager.LoadScene(4);
+                    SceneManager.LoadScene("EndScene");
                 }
                 isOnABlock= true;
             }
