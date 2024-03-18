@@ -162,7 +162,6 @@ public class GameManager : MonoBehaviour
             }
 
             //Updates UI and other variables
-            deckManager.UpdateStoredCardWait();
             uiManager.UpdateReadyText();
 
             uiManager.UpdateDealtCards();
@@ -202,7 +201,6 @@ public class GameManager : MonoBehaviour
             }
 
             //Updates UI and other variables
-            deckManager.UpdateStoredCardWait();
             uiManager.UpdateReadyText();
 
             uiManager.UpdateDealtCards();
@@ -219,7 +217,6 @@ public class GameManager : MonoBehaviour
                 if (deckSize > i)
                     deckManager.DealCard();
             }
-            deckManager.UpdateStoredCardWait();
             uiManager.UpdateReadyText();
 
             uiManager.UpdateDealtCards();

@@ -28,6 +28,7 @@ public class CardManager : MonoBehaviour
     Vector3 mousePosition;
     Vector3 imageStartingPosition;
     Collider2D imageCollider;
+    DeckManager deckManager;
     UIManager uiManager;
 
     //Inits variables for CardManager. Called by GameManager
@@ -35,6 +36,7 @@ public class CardManager : MonoBehaviour
     {
         mousePosition = Vector3.zero;
         imageStartingPosition = Vector3.zero;
+        deckManager = DeckManager.Instance;
         uiManager = UIManager.Instance;
     }
 
@@ -51,8 +53,6 @@ public class CardManager : MonoBehaviour
 
             //Sets the mouse position
             mousePosition = Input.mousePosition;
-
-            //cardImage.GetComponentInChildren<Card>().SetClicked(true);
         }
     }
 
@@ -65,26 +65,51 @@ public class CardManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             imageCollider = cardImage.GetComponent<Collider2D>();
-            
+
             //Checks if the image is overlapping with the play area
             if (imageCollider.IsTouching(playArea))
             {
                 uiManager.PlayCard();
+            } 
+            //Checks if a card was placed on the store card area
+            else if (imageCollider.IsTouching(storeCardArea)) {
+                //Checks if a card is able to be stored
+                if (deckManager.GetStoredCard() == null || deckManager.GetStoredCardWait() == 0)
+                {
+                    //Checks if the stored card area is being played on itself
+                    if (cardImage.name != "Stored Highlight")
+                        uiManager.StoreCard();
+                }
             }
-
-            //Reset position
+            //Reset card position
             cardImage.transform.position = imageStartingPosition;
+            
+
         }
     }
 
-    //Called when the mouse is pressed down and is moved
-    public void OnDrag(Image cardImage)
+    //Called when the mouse is pressed down and is moved on a dealt card
+    public void OnDragDealtCard(Image cardImage)
     {
         //Checks if the left mouse button is being held
         if (Input.GetMouseButton(0))
         {
             cardImage.transform.position = cardImage.transform.position - (mousePosition - Input.mousePosition);
             mousePosition = Input.mousePosition;
+        }
+    }
+
+    //Called when the mouse is pressed down and is moved on the stored card
+    public void OnDragStoreCard(Image cardImage)
+    {
+        //Checks if the left mouse button is being held
+        if (Input.GetMouseButton(0))
+        {
+            if (deckManager.GetStoredCard() != null && deckManager.GetStoredCardWait() == 0)
+            {
+                cardImage.transform.position = cardImage.transform.position - (mousePosition - Input.mousePosition);
+                mousePosition = Input.mousePosition;
+            }
         }
     }
 }
