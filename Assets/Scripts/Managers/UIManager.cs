@@ -175,6 +175,7 @@ public class UIManager : MonoBehaviour
     {
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            SoundManager.Instance.StoringCard();
             //Switches all highlights to off
             highlight1.enabled = false;
             highlight2.enabled = false;
@@ -212,6 +213,7 @@ public class UIManager : MonoBehaviour
      */
     public void ShuffleClicked()
     {
+        SoundManager.Instance.ShuffleCards();
         //Turns all highlights off
         highlight1.enabled = false;
         highlight2.enabled = false;
@@ -230,6 +232,7 @@ public class UIManager : MonoBehaviour
         //If the game state is in Choose Cards
         if (gameManager.gameState == GameManager.STATE.ChooseCards)
         {
+            SoundManager.Instance.SelectedCard();
             switch (cardClicked)
             {
                 //If the stored card was clicked
