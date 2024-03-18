@@ -45,19 +45,8 @@ public class PlayerController : MonoBehaviour
             _animator = GetComponent<Animator>();
         }
         gM = GameManager.Instance;
-        //PlayerInput.currentActionMap.FindAction("Jump").started += Jump;
-        //PlayerInput.currentActionMap.FindAction("Jump").canceled += JumpCanceled;
         PlayerInput.currentActionMap.FindAction("Restart").performed += Restart;
         PlayerInput.currentActionMap.FindAction("Quit").performed += Quit;
-    }
-    void Update()
-    {
-        //Debug.DrawLine(transform.parent.position, transform.parent.position + transform.parent.forward + transform.parent.up * 5, Color.red);
-        /*
-         if (Input.GetKeyDown(KeyCode.Space))
-         {
-             _animator.SetTrigger("Falling");
-         }*/
     }
     public void Restart(InputAction.CallbackContext ctx)
     {
@@ -138,15 +127,18 @@ public class PlayerController : MonoBehaviour
         if(!isOnABlock)
         {
             _animator.SetTrigger("Falling");
+            SoundManager.Instance.Falling();
         }
             
         if (actionName == "Turn Left Card")
         {  
              _animator.SetTrigger("TurnLeft");
+            SoundManager.Instance.Turning();
         }
         else if (actionName == "Turn Right Card")
         {
             _animator.SetTrigger("TurnRight");
+            SoundManager.Instance.Turning();
         }
         else if (actionName == "Jump Card")
         {
@@ -158,9 +150,11 @@ public class PlayerController : MonoBehaviour
                         case "Ground":
                             //_animator.SetTrigger("Jump");
                             _animator.SetTrigger("JumpAcross");
+                            SoundManager.Instance.Jump();
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
+                            SoundManager.Instance.Jump();
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailJump");
@@ -168,6 +162,7 @@ public class PlayerController : MonoBehaviour
                         default:
                             //_animator.SetTrigger("JumpDown");
                             _animator.SetTrigger("JumpAcross");
+                            SoundManager.Instance.Jump();
                             break;
                     }
                     break;
@@ -176,15 +171,19 @@ public class PlayerController : MonoBehaviour
                     {
                         case "Ground":
                             _animator.SetTrigger("JumpDown2");
+                            SoundManager.Instance.Jump();
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Jump");
+                            SoundManager.Instance.Jump();
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("Jump");
+                            SoundManager.Instance.Jump();
                             break;
                         default:
                             _animator.SetTrigger("JumpDown");
+                            SoundManager.Instance.Jump();
                             break;
                     }
                     break;
@@ -193,14 +192,17 @@ public class PlayerController : MonoBehaviour
                     {
                         case "TwoBlock":
                             _animator.SetTrigger("Jump");
+                            SoundManager.Instance.Jump();
                             break;
                         default:
                             _animator.SetTrigger("JumpDown2");
+                            SoundManager.Instance.Jump();
                             break;
                     }
                     break;
                 default:
                     _animator.SetTrigger("Falling");
+                    SoundManager.Instance.Falling();
                     break;
             }
         }
@@ -214,17 +216,19 @@ public class PlayerController : MonoBehaviour
                     {
                         case "Ground":
                             _animator.SetTrigger("Move");
+                            SoundManager.Instance.Moving();
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("FailMove");
-                            print("FOUNDONEBLCOK");
+                            
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
-                            //POYOprint("FOUNDTWOBLCOK");
+                            
                             break;
                         default:
                             _animator.SetTrigger("Move");
+                            SoundManager.Instance.Moving();
                             break;
                     }
                     break;
@@ -233,24 +237,29 @@ public class PlayerController : MonoBehaviour
                     {
                         case "Ground":
                             _animator.SetTrigger("Move");
+                            SoundManager.Instance.Moving();
                             break;
                         case "OneBlock":
                             _animator.SetTrigger("Move");
+                            SoundManager.Instance.Moving();
                             break;
                         case "TwoBlock":
                             _animator.SetTrigger("FailMove");
-                            print("FOUNDTWOBLCOK");
+                            
                             break;
                         default:
                             _animator.SetTrigger("Move");
+                            SoundManager.Instance.Moving();
                             break;
                     }
                     break;
                 case "TwoBlock":
                     _animator.SetTrigger("Move");
+                    SoundManager.Instance.Moving();
                     break;
                 default:
                     _animator.SetTrigger("Falling");
+                    SoundManager.Instance.Falling();
                     break;
             }
         }
@@ -262,31 +271,31 @@ public class PlayerController : MonoBehaviour
                 case "Ground":
                     if(transform.parent.position.y > 1.7f)
                     {
-                        print("GROUND");
                         _animator.SetTrigger("Falling");
+                        SoundManager.Instance.Falling();
                     }
                     break;
                 case "OneBlock":
                     if (transform.parent.position.y > 2.7f)
                     {
-                        print("ONE");
                         _animator.SetTrigger("Falling");
+                        SoundManager.Instance.Falling();
                     }
                     break;
                 case "TwoBlock":
                     if (transform.parent.position.y > 3.7f)
                     {
                         _animator.SetTrigger("Falling");
+                        SoundManager.Instance.Falling();
                     }
                     break;
                 default:
                     _animator.SetTrigger("Falling");
+                    SoundManager.Instance.Falling();
                     break;
             }
             return;
         }
-        //print("Card: " + actionName + " ThisSquare: "+ thisSquare + " Next Square: " + nextSquare);
-        //CheckFalling();
         foreach (BlockID block in blockIDs)
         {
             if (CurrentBlock(block))            // Check if player is on this block

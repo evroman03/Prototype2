@@ -1,18 +1,115 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    //Makes Class a Singleton Class.
+    #region Singleton
+    private static CardManager instance;
+    public static CardManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+                instance = FindAnyObjectByType(typeof(CardManager)) as CardManager;
+            return instance;
+        }
+        set
+        {
+            instance = value;
+        }
+    }
+    #endregion
+
+    //Declares Variables
+    [SerializeField] Collider2D playArea, storeCardArea;
+
+    Vector3 mousePosition;
+    Vector3 imageStartingPosition;
+    Collider2D imageCollider;
+    DeckManager deckManager;
+    UIManager uiManager;
+
+    //Inits variables for CardManager. Called by GameManager
+    public void InitCardManager()
+    {
+        mousePosition = Vector3.zero;
+        imageStartingPosition = Vector3.zero;
+        deckManager = DeckManager.Instance;
+        uiManager = UIManager.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
+    /**
+     * Called when the mouse is pressed on a dealt card
+     */
+    public void MousePressed(Image cardImage)
     {
-        
+        //Checks if the left mouse button was pressed down
+        if (Input.GetMouseButtonDown(0))
+        {
+            //Sets where the image originally was
+            imageStartingPosition = cardImage.transform.position;
+
+            //Sets the mouse position
+            mousePosition = Input.mousePosition;
+        }
+    }
+
+    /**
+     * Called when the mouse is released on a dealt card
+     */
+    public void MouseReleased(Image cardImage)
+    {
+        //Checks if the left mouse button was released
+        if (Input.GetMouseButtonUp(0))
+        {
+            imageCollider = cardImage.GetComponent<Collider2D>();
+
+            //Checks if the image is overlapping with the play area
+            if (imageCollider.IsTouching(playArea))
+            {
+                uiManager.PlayCard();
+            } 
+            //Checks if a card was placed on the store card area
+            else if (imageCollider.IsTouching(storeCardArea)) {
+                //Checks if a card is able to be stored
+                if (deckManager.GetStoredCard() == null || deckManager.GetStoredCardWait() == 0)
+                {
+                    //Checks if the stored card area is being played on itself
+                    if (cardImage.name != "Stored Highlight")
+                        uiManager.StoreCard();
+                }
+            }
+            //Reset card position
+            cardImage.transform.position = imageStartingPosition;
+            
+
+        }
+    }
+
+    //Called when the mouse is pressed down and is moved on a dealt card
+    public void OnDragDealtCard(Image cardImage)
+    {
+        //Checks if the left mouse button is being held
+        if (Input.GetMouseButton(0))
+        {
+            cardImage.transform.position = cardImage.transform.position - (mousePosition - Input.mousePosition);
+            mousePosition = Input.mousePosition;
+        }
+    }
+
+    //Called when the mouse is pressed down and is moved on the stored card
+    public void OnDragStoreCard(Image cardImage)
+    {
+        //Checks if the left mouse button is being held
+        if (Input.GetMouseButton(0))
+        {
+            if (deckManager.GetStoredCard() != null && deckManager.GetStoredCardWait() == 0)
+            {
+                cardImage.transform.position = cardImage.transform.position - (mousePosition - Input.mousePosition);
+                mousePosition = Input.mousePosition;
+            }
+        }
     }
 }
