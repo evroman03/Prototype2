@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[System.Serializable]
+//[System.Serializable]
 public class Card : MonoBehaviour
 {
     [SerializeField]

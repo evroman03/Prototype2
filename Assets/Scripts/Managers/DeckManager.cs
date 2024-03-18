@@ -1,3 +1,7 @@
+/*
+ * Manages all of the decks and their functionality
+ */
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,15 +34,15 @@ public class DeckManager : MonoBehaviour
                        numBackToItCards, numSwitchCards, numClearCards;
     private int totalCards;
     [SerializeField] Card card;
-    [SerializeField] Transform cardFolder;
+    [SerializeField] Transform cardFolder, playedCardsFolder;
 
     private Card spawnCard = null;
-    public List<Card> deck, dealtCards, playedCards;
+    private List<Card> deck, dealtCards, playedCards;
 
     [SerializeField] Card storedCard;
     private int storedCardWait;
 
-    //Init Variables
+    //Init Variables - called by Game Manager
     public void InitDeckManager()
     {
         gameManager = GameManager.Instance;
@@ -343,7 +347,11 @@ public class DeckManager : MonoBehaviour
         if (cardPlacementNumIndex == -1)
         {
             storedCard.SetClicked(false);
+            
+            
             playedCards.Add(storedCard);
+            
+            
             storedCard = null;
             uiManager.UpdatePlayedCardsImage();
             return;
@@ -351,7 +359,23 @@ public class DeckManager : MonoBehaviour
 
         //If any other dealt card was clicked
         dealtCards[cardPlacementNumIndex].SetClicked(false);
-        playedCards.Add(dealtCards[cardPlacementNumIndex]);
+        
+        //Creates a new card to go into the playedCards deck to prevent creating a shallow copy
+
+        //Instaniates played card
+        spawnCard = Instantiate(card);
+
+        //Puts card inside the card folder for organization
+        spawnCard.gameObject.transform.SetParent(playedCardsFolder);
+
+        //Changes attributes of the card
+        spawnCard.name = dealtCards[cardPlacementNumIndex].name;
+        spawnCard.SetClicked(false);
+
+        //Adds card into the deck
+        playedCards.Add(spawnCard);
+
+        //playedCards.Add(dealtCards[cardPlacementNumIndex]);
         uiManager.UpdatePlayedCardsImage();
     }
 
@@ -391,9 +415,7 @@ public class DeckManager : MonoBehaviour
     }
 
     /**
-     * Swaps two cards in the play deck
-     * @Param indexSwap1 - the first card's index to swap with
-     * @Param indexSwap2 - the second card's index to swap with
+     * Swaps two cards in the play deck by finding two selected cards
      */
     public void SwapTwoCards()
     {
@@ -457,25 +479,30 @@ public class DeckManager : MonoBehaviour
      */
     public void SetStoredCard(Card card)
     {
+        //If there is already a card in the stored card slot
         if (storedCard != null)
         {
             int dealtCardsCount = dealtCards.Count;
             Card tempCard = storedCard;
+
+            //Gets the selected card
             for (int i = 0; i < dealtCardsCount; i++)
             {
                 if (dealtCards[i].GetClicked())
                 {
+                    //Swaps the stored card and the selected card
                     storedCard = dealtCards[i];
                     dealtCards[i] = tempCard;
                     dealtCards.Remove(storedCard);
 
+                    //Sets the stored card cooldown
                     storedCardWait = 2;
                     return;
                 }
             }
-        }
-        if (storedCard == null)
-        {
+        //If there is nothing in the stored card slot
+        } else {
+            //Puts the stored card into the stored card slot and sets the cooldown
             storedCard = card;
             dealtCards.Remove(card);
             storedCardWait = 2;
@@ -490,6 +517,9 @@ public class DeckManager : MonoBehaviour
         return storedCard;
     }
 
+    /**
+     * Decrements the stored card cooldown
+     */
     public void UpdateStoredCardWait()
     {
         if (storedCard != null && storedCardWait > 0)
