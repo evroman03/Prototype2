@@ -30,6 +30,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip StoreCard;
     [SerializeField] private AudioClip PlayerFalling;
     [SerializeField] private AudioClip PlayerMoving;
+    [SerializeField] private AudioClip WallCollision;
 
     [SerializeField] private GameObject audioLocation;
 
@@ -82,5 +83,10 @@ public class SoundManager : MonoBehaviour
     public void Turning()
     {
         AudioSource.PlayClipAtPoint(PlayerTurning, audioLocation.transform.position);
+    }
+
+    public void HitWall()
+    {
+        AudioSource.PlayClipAtPoint(WallCollision, audioLocation.transform.position);
     }
 }

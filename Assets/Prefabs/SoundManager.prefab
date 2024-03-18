@@ -50,4 +50,7 @@ MonoBehaviour:
   PlayerTurning: {fileID: 8300000, guid: 3278c3ccaaf822b4cb8c08d6c8562b67, type: 3}
   SelectCard: {fileID: 8300000, guid: b2a7c681288583443a8289ec586276b4, type: 3}
   StoreCard: {fileID: 8300000, guid: 9ba8dd9712f0ed84ba52d173d7ca4878, type: 3}
+  PlayerFalling: {fileID: 8300000, guid: d2e1a456a9b87454e81bc1bfc5c7bbf6, type: 3}
+  PlayerMoving: {fileID: 8300000, guid: 905b184c85d0fd140994f08ebc296976, type: 3}
+  WallCollision: {fileID: 8300000, guid: 8f08061caadb033439363cba9c7ec671, type: 3}
   audioLocation: {fileID: 0}
