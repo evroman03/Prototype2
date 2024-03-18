@@ -32,9 +32,13 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene(5);
     }
-    public void Credits()
+    public void Cards()
     {
         SceneManager.LoadScene(6);
+    }
+    public void Credits()
+    {
+        SceneManager.LoadScene(7);
     }
     
     

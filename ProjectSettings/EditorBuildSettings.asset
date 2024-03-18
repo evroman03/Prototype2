@@ -15,8 +15,17 @@ EditorBuildSettings:
     path: Assets/Scenes/GameScene.unity
     guid: 08b94d56f891a1443b314b5c93b29d0b
   - enabled: 1
+    path: Assets/Scenes/MartaScene.unity
+    guid: e4b3c5fbe0d4be64b8f4dd8949bc5754
+  - enabled: 1
+    path: Assets/Scenes/MartaLevel2.unity
+    guid: dc3ae6c44af687e47bc91440651074ea
+  - enabled: 1
     path: Assets/Scenes/HowToPlay.unity
     guid: 5841efc57a24c214694a4ce3d6407c28
+  - enabled: 1
+    path: Assets/Scenes/CardDescScene.unity
+    guid: 4ab9074a964d4834ca0beda06c984d89
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: 53237a76f2e958344be2b62d620ff93f
