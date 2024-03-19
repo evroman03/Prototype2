@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Quit(InputAction.CallbackContext ctx)
     {
-        Application.Quit();
+        SceneManager.LoadScene("MainMenu");
     }
     public void CheckIfHasAction()
     {
